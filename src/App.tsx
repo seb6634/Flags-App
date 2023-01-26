@@ -5,8 +5,10 @@ import FavouritesCountries from "./components/FavouritesCountries/FavouritesCoun
 import Hero from "./components/Hero/Hero";
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
+import NotFound from "./components/NotFound/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Register from "./components/Register/Login";
+import ResultPage from "./components/ResultPage/ResultPage";
 import { hasAuthenticated } from "./components/services/AuthApi";
 import Welcome from "./components/Welcome/Welcome";
 import { Auth } from "./context/Auth";
@@ -17,7 +19,6 @@ function App() {
   const [countries, setCountries] = useState<any[]>([]);
 
   const onClick = (inputValue: string, selectValue: string) => {
-    console.log("selectValue:", selectValue);
     if (inputValue.length < 3) return;
     if (selectValue.length === 0) return;
     fetch(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
@@ -38,10 +39,14 @@ function App() {
             <Route element={<Welcome onClick={onClick} />} path="/" />
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/register" />
+            <Route
+              element={<ResultPage countries={countries} />}
+              path="/countries"
+            />
             <Route path="/favorites" element={<ProtectedRoute />}>
               <Route path="/favorites" element={<FavouritesCountries />} />
             </Route>
-
+            {/* 
             {countries && countries.length > 0 ? (
               <Route
                 element={countries.map((country: any) => (
@@ -49,13 +54,9 @@ function App() {
                 ))}
                 path="/countries"
               />
-            ) : null}
+            ) : null} */}
+            <Route element={<NotFound />} path="*" />
           </Routes>
-          {/* <Route
-              element={<NotFound />}
-              path="*"
-            />
-          </Routes> */}
         </div>
 
         {/* <Footer></Footer> */}
