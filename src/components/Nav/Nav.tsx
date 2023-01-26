@@ -1,23 +1,17 @@
-import axios from "axios";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { APIUrl } from "../utils";
+import { Auth } from "../../context/Auth";
+import { logout } from "../services/AuthApi";
 import "./Nav.css";
 
 interface NavProps {}
 
 const Nav: FC<NavProps> = () => {
-  const logout = () => {
-    axios
-      .post(`${APIUrl}/users/logout`, {
-        headers: { Authorization: `Bearer ${localStorage.jwt}` },
-      })
-      .then((res) => {
-        localStorage.removeItem("jwt");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
+
+  const handleLogout = () => {
+    logout();
+    setIsAuthenticated(false);
   };
 
   return (
@@ -80,14 +74,19 @@ const Nav: FC<NavProps> = () => {
             <li>
               <a>Settings</a>
             </li>
-            <li>
-              <NavLink to={"/login"}>Login</NavLink>
-            </li>
-            <li>
-              <NavLink onClick={logout} to={"/"}>
-                Logout
-              </NavLink>
-            </li>
+            {!isAuthenticated && (
+              <li>
+                <NavLink to={"/login"}>Login</NavLink>
+              </li>
+            )}
+
+            {isAuthenticated && (
+              <li>
+                <NavLink onClick={handleLogout} to={"/"}>
+                  Logout
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
       </div>

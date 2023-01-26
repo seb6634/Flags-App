@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
+import FavouritesCountries from "./components/FavouritesCountries/FavouritesCountries";
 import Hero from "./components/Hero/Hero";
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Register from "./components/Register/Login";
+import { hasAuthenticated } from "./components/services/AuthApi";
 import Welcome from "./components/Welcome/Welcome";
+import { Auth } from "./context/Auth";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
   const navigate = useNavigate();
   const [countries, setCountries] = useState<any[]>([]);
 
@@ -25,29 +31,35 @@ function App() {
 
   return (
     <>
-      <Nav></Nav>
-      <div className="flex justify-center my-6 flex-wrap gap-10 ">
-        <Routes>
-          <Route element={<Welcome onClick={onClick} />} path="/" />
-          <Route element={<Login />} path="/login" />
+      <Auth.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <Nav></Nav>
+        <div className="flex justify-center my-6 flex-wrap gap-10 ">
+          <Routes>
+            <Route element={<Welcome onClick={onClick} />} path="/" />
+            <Route element={<Login />} path="/login" />
+            <Route element={<Register />} path="/register" />
+            <Route path="/favorites" element={<ProtectedRoute />}>
+              <Route path="/favorites" element={<FavouritesCountries />} />
+            </Route>
 
-          {countries && countries.length > 0 ? (
-            <Route
-              element={countries.map((country: any) => (
-                <Hero key={country.toString()} country={country}></Hero>
-              ))}
-              path="/countries"
-            />
-          ) : null}
-        </Routes>
-        {/* <Route
+            {countries && countries.length > 0 ? (
+              <Route
+                element={countries.map((country: any) => (
+                  <Hero key={country.toString()} country={country}></Hero>
+                ))}
+                path="/countries"
+              />
+            ) : null}
+          </Routes>
+          {/* <Route
               element={<NotFound />}
               path="*"
             />
           </Routes> */}
-      </div>
+        </div>
 
-      {/* <Footer></Footer> */}
+        {/* <Footer></Footer> */}
+      </Auth.Provider>
     </>
   );
 }
