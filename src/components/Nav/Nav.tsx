@@ -41,9 +41,23 @@ const Nav: FC<NavProps> = () => {
             <li>
               <NavLink to={"/"}>Homepage</NavLink>
             </li>
-            <li>
-              <NavLink to={"/favorites"}>Favorites</NavLink>
-            </li>
+            {isAuthenticated && (
+              <>
+                <li>
+                  <NavLink to={"/favorites"}>Favorites</NavLink>
+                </li>
+              </>
+            )}
+            {!isAuthenticated && (
+              <>
+                <li>
+                  <NavLink to={"/register"}>Register</NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/register"}>Login</NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

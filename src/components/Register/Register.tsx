@@ -1,13 +1,9 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Auth } from "../../context/Auth";
-import { login } from "../services/AuthApi";
-import "./Login.css";
+import { register } from "../services/AuthApi";
 
 const Register: FC = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
   const navigate = useNavigate();
-
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -23,19 +19,12 @@ const Register: FC = () => {
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    try {
-      const response = await login(user);
-      setIsAuthenticated(response);
-    } catch ({ response }) {
-      console.log(response);
-    }
+    register(user).then((response) => {
+      if (response) {
+        navigate("/login");
+      }
+    });
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated]);
 
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -96,7 +85,7 @@ const Register: FC = () => {
                 </label>
               </div>
               <button type="submit" className="btn btn-primary">
-                Login
+                Register
               </button>
             </form>
           </div>

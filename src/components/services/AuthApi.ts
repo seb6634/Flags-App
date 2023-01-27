@@ -15,6 +15,11 @@ export const login = async (credentials: any) => {
   return true;
 };
 
+export const register = async (credentials: any) => {
+  await axios.post(`${APIUrl}/users`, credentials);
+  return true;
+};
+
 export const logout = () => {
   removeItem("jwt");
 };

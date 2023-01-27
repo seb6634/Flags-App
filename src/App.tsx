@@ -1,15 +1,16 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import FavouritesCountries from "./components/FavouritesCountries/FavouritesCountries";
-import Hero from "./components/Hero/Hero";
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
 import NotFound from "./components/NotFound/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Register from "./components/Register/Login";
+import Register from "./components/Register/Register";
 import ResultPage from "./components/ResultPage/ResultPage";
 import { hasAuthenticated } from "./components/services/AuthApi";
+import { APIUrl } from "./components/utils";
 import Welcome from "./components/Welcome/Welcome";
 import { Auth } from "./context/Auth";
 
@@ -17,6 +18,59 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
   const navigate = useNavigate();
   const [countries, setCountries] = useState<any[]>([]);
+  const [user, setUser] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  const getUser = () => {
+    axios
+      .get(`${APIUrl}/user`, {
+        headers: {
+          Authorization: `Bearer ${"MTQ.WRbMP5V34Slw6I_Ejwp7HJCfS1wFNTq-VauiMr9-pd3b2jNlhEL9SzOAdlVX"}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((er) => {
+        console.log("error:", er);
+      });
+  };
+
+  const addToFarovites = (cca3: string) => {
+    const userFavoritesToArr = user.favorites_countries.split(",");
+    let favoritesCountries = userFavoritesToArr.includes(cca3)
+      ? userFavoritesToArr
+          .filter((country: string) => country !== cca3)
+          .join(",")
+      : [...userFavoritesToArr, cca3].join(",");
+
+    if (Array.from(favoritesCountries)[0] === ",") {
+      favoritesCountries = favoritesCountries.slice(1);
+    }
+
+    const partialUser = {
+      id: user.id,
+      favorites_countries: favoritesCountries,
+    };
+    // update user
+    axios
+      .put(
+        `${APIUrl}/users`,
+        {
+          partialUser,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${"MTQ.WRbMP5V34Slw6I_Ejwp7HJCfS1wFNTq-VauiMr9-pd3b2jNlhEL9SzOAdlVX"}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log("response:", response);
+        setUser(response.data);
+      });
+  };
 
   const onClick = (inputValue: string, selectValue: string) => {
     if (inputValue.length < 3) return;
@@ -24,11 +78,22 @@ function App() {
     fetch(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log("data:", data);
         setCountries(data);
+        setLoading(false);
+        setNotFound(false);
+        navigate("/countries");
+
+        if (data.status === 404) setNotFound(true);
+      })
+      .catch((er) => {
+        console.log("error:", er);
       });
-    if (!countries) return;
-    navigate("/countries");
   };
+
+  useEffect(() => {
+    if (isAuthenticated) getUser();
+  }, []);
 
   return (
     <>
@@ -40,21 +105,28 @@ function App() {
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/register" />
             <Route
-              element={<ResultPage countries={countries} />}
+              element={
+                <ResultPage
+                  countries={countries}
+                  addToFarovites={addToFarovites}
+                  loading={loading}
+                  notFound={notFound}
+                  user={user}
+                />
+              }
               path="/countries"
             />
             <Route path="/favorites" element={<ProtectedRoute />}>
-              <Route path="/favorites" element={<FavouritesCountries />} />
-            </Route>
-            {/* 
-            {countries && countries.length > 0 ? (
               <Route
-                element={countries.map((country: any) => (
-                  <Hero key={country.toString()} country={country}></Hero>
-                ))}
-                path="/countries"
+                path="/favorites"
+                element={
+                  <FavouritesCountries
+                    addToFarovites={addToFarovites}
+                    user={user}
+                  />
+                }
               />
-            ) : null} */}
+            </Route>
             <Route element={<NotFound />} path="*" />
           </Routes>
         </div>

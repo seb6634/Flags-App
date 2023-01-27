@@ -3,9 +3,12 @@ import "./Hero.css";
 
 interface HeroProps {
   country: any;
+  addToFarovites?: any;
+  isFavorite?: boolean;
+  user: any;
 }
 
-const Hero: FC<HeroProps> = ({ country }) => {
+const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
   const [borderCountries, setBorderCountries] = useState<any[]>([]);
 
   const getBorderCountries = (borders: string[]) => {
@@ -24,7 +27,6 @@ const Hero: FC<HeroProps> = ({ country }) => {
 
   useEffect(() => {
     if (country.borders) {
-      setBorderCountries([]);
       getBorderCountries(country.borders);
     }
   }, []);
@@ -67,19 +69,43 @@ const Hero: FC<HeroProps> = ({ country }) => {
             <p className="py-1">Région: {country.region}</p>
             <p className="py-1">Sous-région: {country.subregion}</p>
             <p className="py-1">Code: {country.cca3}</p>
-            <p className="py-1">
+            {/* <p className="py-1">
               Borders:
               {borderCountries.map((border: string, index: number) => (
                 <span
+                  key={index}
                   onClick={() => onClick(index)}
                   className="mx-2 cursor-pointer "
                 >
                   {border}
                 </span>
               ))}
-            </p>
+            </p> */}
 
             <div className="card-actions justify-end">
+              <button
+                onClick={() => addToFarovites(country.cca3)}
+                className="btn btn-ghost"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill={
+                    user.favorites_countries.includes(country.cca3)
+                      ? "red"
+                      : "none"
+                  }
+                  viewBox="0 0 24 24"
+                  stroke="red"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </button>
               {/* <button className="btn btn-primary">Listen</button> */}
             </div>
           </div>
