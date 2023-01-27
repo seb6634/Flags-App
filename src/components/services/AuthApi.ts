@@ -10,7 +10,7 @@ export const hasAuthenticated = () => {
 
 export const login = async (credentials: any) => {
   const response = await axios.post(`${APIUrl}/users/login`, credentials);
-  const token = response.data.token;
+  const token = response.data.token.token;
   addItem("jwt", token);
   return true;
 };

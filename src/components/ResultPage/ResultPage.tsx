@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
+import { User } from "../types";
 import "./ResultPage.css";
 
 interface ResultPageProps {
@@ -8,7 +9,7 @@ interface ResultPageProps {
   addToFarovites?: any;
   loading?: boolean;
   notFound?: boolean;
-  user: any;
+  user?: User;
 }
 
 const ResultPage: FC<ResultPageProps> = ({

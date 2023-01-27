@@ -3,5 +3,5 @@ export type User = {
   email: string;
   username: string;
   password: string;
-  favoritesCountries: string;
+  favorites_countries: string;
 };

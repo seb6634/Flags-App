@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
+import { User } from "../types";
 import "./Hero.css";
 
 interface HeroProps {
   country: any;
   addToFarovites?: any;
   isFavorite?: boolean;
-  user: any;
+  user?: User;
 }
 
 const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
@@ -91,6 +92,8 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
                   fill={
+                    user &&
+                    user.favorites_countries &&
                     user.favorites_countries.includes(country.cca3)
                       ? "red"
                       : "none"
@@ -106,7 +109,6 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
                   />
                 </svg>
               </button>
-              {/* <button className="btn btn-primary">Listen</button> */}
             </div>
           </div>
         </>

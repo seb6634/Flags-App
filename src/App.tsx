@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Register from "./components/Register/Register";
 import ResultPage from "./components/ResultPage/ResultPage";
 import { hasAuthenticated } from "./components/services/AuthApi";
+import { User } from "./components/types";
 import { APIUrl } from "./components/utils";
 import Welcome from "./components/Welcome/Welcome";
 import { Auth } from "./context/Auth";
@@ -18,7 +19,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
   const navigate = useNavigate();
   const [countries, setCountries] = useState<any[]>([]);
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -26,7 +27,7 @@ function App() {
     axios
       .get(`${APIUrl}/user`, {
         headers: {
-          Authorization: `Bearer ${"MTQ.WRbMP5V34Slw6I_Ejwp7HJCfS1wFNTq-VauiMr9-pd3b2jNlhEL9SzOAdlVX"}`,
+          Authorization: `Bearer ${localStorage.jwt}`,
         },
       })
       .then((response) => {
@@ -38,6 +39,7 @@ function App() {
   };
 
   const addToFarovites = (cca3: string) => {
+    if (!user) return;
     const userFavoritesToArr = user.favorites_countries.split(",");
     let favoritesCountries = userFavoritesToArr.includes(cca3)
       ? userFavoritesToArr
@@ -62,7 +64,7 @@ function App() {
         },
         {
           headers: {
-            Authorization: `Bearer ${"MTQ.WRbMP5V34Slw6I_Ejwp7HJCfS1wFNTq-VauiMr9-pd3b2jNlhEL9SzOAdlVX"}`,
+            Authorization: `Bearer ${localStorage.jwt}`,
           },
         }
       )
@@ -78,7 +80,6 @@ function App() {
     fetch(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("data:", data);
         setCountries(data);
         setLoading(false);
         setNotFound(false);

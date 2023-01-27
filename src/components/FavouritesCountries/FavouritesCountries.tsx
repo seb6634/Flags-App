@@ -2,11 +2,12 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
+import { User } from "../types";
 import "./FavouritesCountries.css";
 
 interface FavouritesCountriesProps {
   addToFarovites?: any;
-  user: any;
+  user?: User;
 }
 
 const FavouritesCountries: FC<FavouritesCountriesProps> = ({
@@ -30,9 +31,12 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
   };
 
   useEffect(() => {
-    if (user.favorites_countries) {
+    if (user && user.favorites_countries) {
       setLoading(false);
       getFavoritesCountries(user.favorites_countries);
+    } else {
+      setLoading(false);
+      setNotFound(true);
     }
   }, []);
 
@@ -52,7 +56,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
               ></Hero>
             ))
           ) : (
-            <p>Aucun résultat</p>
+            <p>Aucun favoris</p>
           )}
         </>
       )}
