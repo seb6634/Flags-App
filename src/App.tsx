@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { Flip, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import FavouritesCountries from "./components/FavouritesCountries/FavouritesCountries";
 import Login from "./components/Login/Login";
@@ -40,7 +42,10 @@ function App() {
   };
 
   const addToFarovites = (cca3: string) => {
-    if (!user) return;
+    if (!user) {
+      toast("You must be logged in to access this feature!");
+      return;
+    }
     const userFavoritesToArr = user.favorites_countries.split(",");
     let favoritesCountries = userFavoritesToArr.includes(cca3)
       ? userFavoritesToArr
@@ -78,15 +83,15 @@ function App() {
   const onClick = (inputValue: string, selectValue: string) => {
     if (inputValue.length < 3) return;
     if (selectValue.length === 0) return;
-    fetch(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setCountries(data);
+    axios
+      .get(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
+      .then((response) => {
+        setCountries(response.data);
         setLoading(false);
         setNotFound(false);
         navigate("/countries");
 
-        if (data.status === 404) setNotFound(true);
+        if (response.data.status === 404) setNotFound(true);
       })
       .catch((er) => {
         console.log("error:", er);
@@ -95,12 +100,22 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) getUser();
+    else {
+      navigate("/");
+    }
   }, []);
 
   return (
     <>
       <Auth.Provider value={{ isAuthenticated, setIsAuthenticated }}>
         <Nav></Nav>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          transition={Flip}
+          theme="dark"
+          limit={1}
+        />
         <div className="flex justify-center my-6 flex-wrap gap-10 ">
           <Routes>
             <Route element={<Welcome onClick={onClick} />} path="/" />

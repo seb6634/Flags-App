@@ -32,7 +32,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick }) => {
             className="select select-bordered w-full max-w-xs my-6"
           >
             {selectActionList.map((action) => (
-              <option key={action.name}>{action.label}</option>
+              <option key={action.name}>{action.name}</option>
             ))}
           </select>
           <input
