@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from "react";
+import axios from "axios";
+import { FC, useEffect, useState } from "react";
 import { User } from "../types";
 import "./Hero.css";
 
 interface HeroProps {
   country: any;
   addToFarovites?: any;
-  isFavorite?: boolean;
   user?: User;
 }
 
@@ -14,10 +14,10 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
 
   const getBorderCountries = (borders: string[]) => {
     borders.forEach((border) => {
-      fetch(`https://restcountries.com/v3.1/alpha/${border}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setBorderCountries((prev) => [...prev, data[0].flag]);
+      axios
+        .get(`https://restcountries.com/v3.1/alpha/${border}`)
+        .then((response) => {
+          setBorderCountries((prev) => [...prev, response.data[0].flag]);
         });
     });
   };

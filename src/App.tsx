@@ -6,6 +6,7 @@ import FavouritesCountries from "./components/FavouritesCountries/FavouritesCoun
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
 import NotFound from "./components/NotFound/NotFound";
+import ProfilePage from "./components/ProfilePage/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Register from "./components/Register/Register";
 import ResultPage from "./components/ResultPage/ResultPage";
@@ -105,6 +106,7 @@ function App() {
             <Route element={<Welcome onClick={onClick} />} path="/" />
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/register" />
+            <Route element={<ProfilePage user={user} />} path="/profile" />
             <Route
               element={
                 <ResultPage
@@ -117,6 +119,8 @@ function App() {
               }
               path="/countries"
             />
+
+            {/* ProtectedRoute */}
             <Route path="/favorites" element={<ProtectedRoute />}>
               <Route
                 path="/favorites"

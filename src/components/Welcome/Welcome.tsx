@@ -1,3 +1,4 @@
+import axios from "axios";
 import { FC, useState } from "react";
 import "./Welcome.css";
 
@@ -8,7 +9,12 @@ interface WelcomeProps {
 const Welcome: FC<WelcomeProps> = ({ onClick }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("name");
-  const selectActionList = ["name", "capital", "lang", "currency"];
+  const selectActionList = [
+    { name: "name", label: "Name" },
+    { name: "capital", label: "Capital" },
+    { name: "lang", label: "Language" },
+    { name: "currency", label: "Currency" },
+  ];
 
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -26,12 +32,12 @@ const Welcome: FC<WelcomeProps> = ({ onClick }) => {
             className="select select-bordered w-full max-w-xs my-6"
           >
             {selectActionList.map((action) => (
-              <option key={action}>{action}</option>
+              <option key={action.name}>{action.label}</option>
             ))}
           </select>
           <input
             onChange={(e) => setInputValue(e.target.value)}
-            type="text"
+            type="search"
             placeholder="Type here"
             className="input w-full max-w-xs"
           />

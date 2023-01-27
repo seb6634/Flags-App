@@ -54,7 +54,7 @@ const Nav: FC<NavProps> = () => {
                   <NavLink to={"/register"}>Register</NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/register"}>Login</NavLink>
+                  <NavLink to={"/login"}>Login</NavLink>
                 </li>
               </>
             )}
@@ -77,24 +77,27 @@ const Nav: FC<NavProps> = () => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            {/* <li>
-              <a className="justify-between">Profile</a>
-            </li>
             <li>
-              <a>Settings</a>
-            </li> */}
+              <NavLink onClick={handleLogout} to={"/profile"}>
+                Profile
+              </NavLink>
+            </li>
             {!isAuthenticated && (
-              <li>
-                <NavLink to={"/login"}>Login</NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink to={"/login"}>Login</NavLink>
+                </li>
+              </>
             )}
 
             {isAuthenticated && (
-              <li>
-                <NavLink onClick={handleLogout} to={"/"}>
-                  Logout
-                </NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink onClick={handleLogout} to={"/"}>
+                    Logout
+                  </NavLink>
+                </li>
+              </>
             )}
           </ul>
         </div>
