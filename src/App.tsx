@@ -5,6 +5,8 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import FavouritesCountries from "./components/FavouritesCountries/FavouritesCountries";
+import Game from "./components/Game/Game";
+import GamePage from "./components/GamePage/GamePage";
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
 import NotFound from "./components/NotFound/NotFound";
@@ -14,7 +16,7 @@ import Register from "./components/Register/Register";
 import ResultPage from "./components/ResultPage/ResultPage";
 import { hasAuthenticated } from "./components/services/AuthApi";
 import { User } from "./components/types";
-import { APIUrl } from "./components/utils";
+import { APIUrl, countriesAPIUrl } from "./components/utils";
 import Welcome from "./components/Welcome/Welcome";
 import { Auth } from "./context/Auth";
 
@@ -84,7 +86,11 @@ function App() {
     if (inputValue.length < 3) return;
     if (selectValue.length === 0) return;
     axios
-      .get(`https://restcountries.com/v3.1/${selectValue}/${inputValue}`)
+      .get(
+        selectValue === "name"
+          ? `${countriesAPIUrl}/translation/${inputValue}`
+          : `${countriesAPIUrl}/${selectValue}/${inputValue}`
+      )
       .then((response) => {
         setCountries(response.data);
         setLoading(false);
@@ -116,40 +122,40 @@ function App() {
           theme="dark"
           limit={1}
         />
-        <div className="flex justify-center my-6 flex-wrap gap-10 ">
-          <Routes>
-            <Route element={<Welcome onClick={onClick} />} path="/" />
-            <Route element={<Login />} path="/login" />
-            <Route element={<Register />} path="/register" />
-            <Route element={<ProfilePage user={user} />} path="/profile" />
+        <Routes>
+          <Route element={<Welcome onClick={onClick} />} path="/" />
+          <Route element={<GamePage />} path="/game-page" />
+          <Route element={<Game />} path="/game" />
+          <Route element={<Login />} path="/login" />
+          <Route element={<Register />} path="/register" />
+          <Route element={<ProfilePage user={user} />} path="/profile" />
+          <Route
+            element={
+              <ResultPage
+                countries={countries}
+                addToFarovites={addToFarovites}
+                loading={loading}
+                notFound={notFound}
+                user={user}
+              />
+            }
+            path="/countries"
+          />
+
+          {/* ProtectedRoute */}
+          <Route path="/favorites" element={<ProtectedRoute />}>
             <Route
+              path="/favorites"
               element={
-                <ResultPage
-                  countries={countries}
+                <FavouritesCountries
                   addToFarovites={addToFarovites}
-                  loading={loading}
-                  notFound={notFound}
                   user={user}
                 />
               }
-              path="/countries"
             />
-
-            {/* ProtectedRoute */}
-            <Route path="/favorites" element={<ProtectedRoute />}>
-              <Route
-                path="/favorites"
-                element={
-                  <FavouritesCountries
-                    addToFarovites={addToFarovites}
-                    user={user}
-                  />
-                }
-              />
-            </Route>
-            <Route element={<NotFound />} path="*" />
-          </Routes>
-        </div>
+          </Route>
+          <Route element={<NotFound />} path="*" />
+        </Routes>
 
         {/* <Footer></Footer> */}
       </Auth.Provider>

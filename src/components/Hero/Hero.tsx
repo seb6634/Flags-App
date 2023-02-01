@@ -56,8 +56,8 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
             />
           </figure>
           <div className="card-body">
-            <h2 className="card-title"> {country.altSpellings.at(-1)}</h2>
-            <p> {country.translations.fra.common}.</p>
+            <h2 className="card-title"> {country.translations.fra.common}</h2>
+            <p> {country.altSpellings.at(-1)}.</p>
             <p className="py-1">Capitale: {country.capital}</p>
             <p className="py-1">
               Population: {formatNumber(country.population)}
