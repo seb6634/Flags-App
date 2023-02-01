@@ -16,7 +16,6 @@ const Timer: FC<TimerProps> = ({
   const [seconds, setSeconds] = useState(initialSeconds);
 
   const convertSecondsToPercentage = (seconds: number) => {
-    console.log((seconds / 60) * 100);
     return (seconds / 60) * 100;
   };
 

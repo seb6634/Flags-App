@@ -1,5 +1,9 @@
-import React, { FC, useEffect } from "react";
+import axios from "axios";
+import { FC, useEffect, useState } from "react";
+import { updateUser } from "../services/ApiRequests";
+import { themesList } from "../services/ThemesList";
 import { User } from "../types";
+import { APIUrl } from "../utils";
 import "./ProfilePage.css";
 
 interface ProfilePageProps {
@@ -7,44 +11,37 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
-  const themesList = [
-    "light",
-    "dark",
-    "cupcake",
-    "bumblebee",
-    "emerald",
-    "corporate",
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "halloween",
-    "garden",
-    "forest",
-    "aqua",
-    "lofi",
-    "pastel",
-    "fantasy",
-    "wireframe",
-    "black",
-    "luxury",
-    "dracula",
-    "cmyk",
-    "autumn",
-    "business",
-    "acid",
-    "lemonade",
-    "night",
-    "coffee",
-    "winter",
-  ];
-  const [theme, setTheme] = React.useState("dark");
+  const [theme, setTheme] = useState(user?.theme ?? "dark");
+
   const changeTheme = (event: any) => {
-    setTheme(event.target.value);
+    if (user) {
+      const partialUser = {
+        id: user.id,
+        theme: event.target.value,
+      };
+      axios
+        .put(
+          `${APIUrl}/users`,
+          {
+            partialUser,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.jwt}`,
+            },
+          }
+        )
+        .then((response) => {
+          setTheme(response.data.theme);
+        })
+        .catch((er) => {
+          console.log("error:", er);
+        });
+    }
   };
   useEffect(() => {
-    document.querySelector("html")?.setAttribute("data-theme", theme);
-  }, [theme]);
+    if (user) document.querySelector("html")?.setAttribute("data-theme", theme);
+  }, [theme, user]);
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content text-center">

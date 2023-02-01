@@ -45,23 +45,25 @@ function App() {
 
   const addToFarovites = (cca3: string) => {
     if (!user) {
-      toast("You must be logged in to access this feature!");
+      toast("Vous devez être connecté pour accéder à cette fonctionnalité !");
       return;
     }
-    const userFavoritesToArr = user.favorites_countries.split(",");
-    let favoritesCountries = userFavoritesToArr.includes(cca3)
-      ? userFavoritesToArr
-          .filter((country: string) => country !== cca3)
-          .join(",")
-      : [...userFavoritesToArr, cca3].join(",");
+    let favoritesCountries;
+    if (user.favorites_countries) {
+      const userFavoritesToArr = user.favorites_countries.split(",");
+      favoritesCountries = userFavoritesToArr.includes(cca3)
+        ? userFavoritesToArr
+            .filter((country: string) => country !== cca3)
+            .join(",")
+        : [...userFavoritesToArr, cca3].join(",");
 
-    if (Array.from(favoritesCountries)[0] === ",") {
-      favoritesCountries = favoritesCountries.slice(1);
+      if (Array.from(favoritesCountries)[0] === ",") {
+        favoritesCountries = favoritesCountries.slice(1);
+      }
     }
-
     const partialUser = {
       id: user.id,
-      favorites_countries: favoritesCountries,
+      favorites_countries: favoritesCountries ?? cca3,
     };
     // update user
     axios
@@ -111,6 +113,11 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (user)
+      document.querySelector("html")?.setAttribute("data-theme", user.theme);
+  }, [user]);
+
   return (
     <>
       <Auth.Provider value={{ isAuthenticated, setIsAuthenticated }}>
@@ -124,11 +131,10 @@ function App() {
         />
         <Routes>
           <Route element={<Welcome onClick={onClick} />} path="/" />
-          <Route element={<GamePage />} path="/game-page" />
-          <Route element={<Game />} path="/game" />
+          <Route element={<GamePage user={user} />} path="/game-page" />
+          <Route element={<Game user={user} />} path="/game" />`
           <Route element={<Login />} path="/login" />
           <Route element={<Register />} path="/register" />
-          <Route element={<ProfilePage user={user} />} path="/profile" />
           <Route
             element={
               <ResultPage
@@ -141,7 +147,6 @@ function App() {
             }
             path="/countries"
           />
-
           {/* ProtectedRoute */}
           <Route path="/favorites" element={<ProtectedRoute />}>
             <Route
@@ -153,6 +158,9 @@ function App() {
                 />
               }
             />
+          </Route>
+          <Route path="/profile" element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfilePage user={user} />} />
           </Route>
           <Route element={<NotFound />} path="*" />
         </Routes>

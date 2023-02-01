@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import Counter from "../Counter/Counter";
 import Loader from "../Loader/Loader";
 import Timer from "../Timer/Timer";
+import { APIUrl } from "../utils";
 import "./Game.css";
 
-interface GameProps {}
+interface GameProps {
+  user?: any;
+}
 
-const Game: FC<GameProps> = () => {
+const Game: FC<GameProps> = ({ user }) => {
   const [countries, setCountries] = useState<any>([]);
   const [score, setScore] = useState(0);
   const [next, setNext] = useState(0);
@@ -24,6 +27,31 @@ const Game: FC<GameProps> = () => {
     setTimeout(() => {
       navigate("/game-page");
     }, 5000);
+
+    if (user && score > user.best_score) {
+      const partialUser = {
+        id: user.id,
+        best_score: score,
+      };
+      axios
+        .put(
+          `${APIUrl}/users`,
+          {
+            partialUser,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.jwt}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response:", response);
+        })
+        .catch((er) => {
+          console.log("error:", er);
+        });
+    }
   };
 
   const randomize = (data: any[]) => {

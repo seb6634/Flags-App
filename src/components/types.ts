@@ -4,4 +4,6 @@ export type User = {
   username: string;
   password: string;
   favorites_countries: string;
+  best_score: number;
+  theme: string;
 };

@@ -2,6 +2,7 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
+import NotResults from "../NotResults/NotResults";
 import { User } from "../types";
 import "./FavouritesCountries.css";
 
@@ -38,7 +39,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       setLoading(false);
       setNotFound(true);
     }
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -56,7 +57,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
               ></Hero>
             ))
           ) : (
-            <p>Aucun favoris</p>
+            <NotResults message={"Aucun favoris"} />
           )}
         </>
       )}

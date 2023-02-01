@@ -8,7 +8,7 @@ interface NavProps {}
 
 const Nav: FC<NavProps> = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
-  const fullScreen = window.location.pathname === "/player" ? true : false;
+  const fullScreen = window.location.pathname === "/game" ? true : false;
 
   const handleLogout = () => {
     logout();
@@ -42,35 +42,40 @@ const Nav: FC<NavProps> = () => {
                 className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <NavLink to={"/"}>Homepage</NavLink>
+                  <NavLink to={"/"}>Accueil</NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/game-page"}>Game</NavLink>
+                  <NavLink to={"/game-page"}>Jouer</NavLink>
                 </li>
                 {isAuthenticated && (
                   <>
                     <li>
-                      <NavLink to={"/favorites"}>Favorites</NavLink>
+                      <NavLink to={"/favorites"}>Favoris</NavLink>
                     </li>
                   </>
                 )}
                 {!isAuthenticated && (
                   <>
                     <li>
-                      <NavLink to={"/register"}>Register</NavLink>
+                      <NavLink to={"/register"}>Créer un compte</NavLink>
                     </li>
                     <li>
-                      <NavLink to={"/login"}>Login</NavLink>
+                      <NavLink to={"/login"}>Connexion</NavLink>
                     </li>
                   </>
                 )}
               </ul>
             </div>
           </div>
+          <div className="navbar-center">
+            <NavLink to={"/"}>
+              <img width={50} src="world.png" alt="world-logo" />
+            </NavLink>
+          </div>
 
-          {isAuthenticated && (
-            <>
-              <div className="navbar-end">
+          <div className="navbar-end">
+            {isAuthenticated && (
+              <>
                 <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
@@ -88,15 +93,16 @@ const Nav: FC<NavProps> = () => {
                     className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
                   >
                     <li>
-                      <NavLink onClick={handleLogout} to={"/profile"}>
-                        Profile
+                      <NavLink to={"/profile"}>Profil</NavLink>
+                      <NavLink onClick={handleLogout} to={"/"}>
+                        Se déconnecter
                       </NavLink>
                     </li>
                   </ul>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       )}
     </>
