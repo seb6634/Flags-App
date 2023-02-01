@@ -36,7 +36,7 @@ const Login: FC<LoginProps> = () => {
     if (isAuthenticated) {
       navigate("/");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="hero min-h-screen bg-base-200">

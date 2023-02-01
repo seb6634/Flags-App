@@ -1,5 +1,4 @@
-import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { User } from "../types";
 import "./Hero.css";
 
@@ -10,27 +9,27 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
-  const [borderCountries, setBorderCountries] = useState<any[]>([]);
+  // const [borderCountries, setBorderCountries] = useState<any[]>([]);
 
-  const getBorderCountries = (borders: string[]) => {
-    borders.forEach((border) => {
-      axios
-        .get(`https://restcountries.com/v3.1/alpha/${border}`)
-        .then((response) => {
-          setBorderCountries((prev) => [...prev, response.data[0].flag]);
-        });
-    });
-  };
+  // const getBorderCountries = (borders: string[]) => {
+  //   borders.forEach((border) => {
+  //     axios
+  //       .get(`https://restcountries.com/v3.1/alpha/${border}`)
+  //       .then((response) => {
+  //         setBorderCountries((prev) => [...prev, response.data[0].flag]);
+  //       });
+  //   });
+  // };
 
-  const onClick = (index: number) => {
-    console.log(country.borders[index]);
-  };
+  // const onClick = (index: number) => {
+  //   console.log(country.borders[index]);
+  // };
 
-  useEffect(() => {
-    if (country.borders) {
-      getBorderCountries(country.borders);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (country.borders) {
+  //     getBorderCountries(country.borders);
+  //   }
+  // }, [country.borders]);
 
   const formatNumber = (number: number) => {
     if (number < 1000) {

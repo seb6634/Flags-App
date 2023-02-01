@@ -1,6 +1,5 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { updateUser } from "../services/ApiRequests";
 import { themesList } from "../services/ThemesList";
 import { User } from "../types";
 import { APIUrl } from "../utils";
