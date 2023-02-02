@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import { hasAuthenticated } from "../services/AuthApi";
 import { User } from "../types";
 import "./Hero.css";
 
@@ -9,6 +10,8 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
+  const [isAuthenticated] = useState(hasAuthenticated());
+
   // const [borderCountries, setBorderCountries] = useState<any[]>([]);
 
   // const getBorderCountries = (borders: string[]) => {
@@ -83,31 +86,33 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
             </p> */}
 
             <div className="card-actions justify-end">
-              <button
-                onClick={() => addToFarovites(country.cca3)}
-                className="btn btn-ghost"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill={
-                    user &&
-                    user.favorites_countries &&
-                    user.favorites_countries.includes(country.cca3)
-                      ? "red"
-                      : "none"
-                  }
-                  viewBox="0 0 24 24"
-                  stroke="red"
+              {isAuthenticated && (
+                <button
+                  onClick={() => addToFarovites(country.cca3)}
+                  className="btn btn-ghost"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill={
+                      user &&
+                      user.favorites_countries &&
+                      user.favorites_countries.includes(country.cca3)
+                        ? "red"
+                        : "none"
+                    }
+                    viewBox="0 0 24 24"
+                    stroke="red"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </>

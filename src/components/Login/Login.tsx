@@ -39,7 +39,7 @@ const Login: FC<LoginProps> = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="hero min-h-screen bg-base-200">
+    <>
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">Me connecter!</h1>
@@ -95,7 +95,7 @@ const Login: FC<LoginProps> = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

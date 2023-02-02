@@ -10,12 +10,11 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
-  const [theme, setTheme] = useState(user?.theme ?? "dark");
+  const [theme, setTheme] = useState("dark");
 
   const changeTheme = (event: any) => {
     if (user) {
       const partialUser = {
-        id: user.id,
         theme: event.target.value,
       };
       axios
@@ -31,6 +30,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
           }
         )
         .then((response) => {
+          console.log("response:", response);
           setTheme(response.data.theme);
         })
         .catch((er) => {
@@ -39,26 +39,23 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
     }
   };
   useEffect(() => {
-    if (user) document.querySelector("html")?.setAttribute("data-theme", theme);
-  }, [theme, user]);
+    if (user)
+      document.querySelector("html")?.setAttribute("data-theme", user.theme);
+  }, [user]);
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content text-center">
-        <div className="max-w-md">
-          <h1 className="text-5xl font-bold mb-5">Profile</h1>
-          <span className="label-text">Pick the best fantasy franchise</span>
-          <select
-            value={theme}
-            onChange={changeTheme}
-            className="select select-primary w-full max-w-xs"
-          >
-            {themesList.map((theme) => (
-              <option key={theme}>{theme}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </div>
+    <>
+      <h1 className="text-5xl font-bold mb-5">Profile</h1>
+      <span className="label-text">Pick the best fantasy franchise</span>
+      <select
+        value={theme}
+        onChange={changeTheme}
+        className="select select-primary w-full max-w-xs"
+      >
+        {themesList.map((theme) => (
+          <option key={theme}>{theme}</option>
+        ))}
+      </select>
+    </>
   );
 };
 

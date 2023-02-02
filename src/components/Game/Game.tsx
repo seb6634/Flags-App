@@ -112,59 +112,49 @@ const Game: FC<GameProps> = ({ user }) => {
         <Loader />
       ) : (
         <>
-          <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content text-center">
-              <div className="max-w-md">
-                <>
-                  {!end ? (
-                    <>
-                      <span className="">
-                        <Timer
-                          initialMinute={0}
-                          initialSeconds={60}
-                          endOfTime={endOfTime}
-                        />
-                      </span>
-                      <h1 className="text-2xl font-bold my-6">
-                        Quel est ce pays ?
-                      </h1>
-                      <>
-                        {flag && (
-                          <figure className="my-6">
-                            <img
-                              src={flag.flags.png}
-                              className=" w-full rounded-lg shadow-2xl object-cover"
-                              alt="country"
-                            />
-                          </figure>
-                        )}
-                      </>
-                      <div className="flex flex-col">
-                        {countries &&
-                          countries.map((question: any) => {
-                            return (
-                              <button
-                                disabled={disabled}
-                                onClick={(e) => handleClick(e, question.cca3)}
-                                key={question.cca3}
-                                className="btn my-3 btn-primary"
-                              >
-                                {question.translations.fra.common}
-                              </button>
-                            );
-                          })}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <h1 className="text-5xl font-bold my-6">Terminé !</h1>
-                      <Counter value={score} />
-                    </>
-                  )}
-                </>
+          {!end ? (
+            <>
+              <span className="">
+                <Timer
+                  initialMinute={0}
+                  initialSeconds={60}
+                  endOfTime={endOfTime}
+                />
+              </span>
+              <h1 className="text-2xl font-bold my-6">Quel est ce pays ?</h1>
+              <>
+                {flag && (
+                  <figure className="my-6">
+                    <img
+                      src={flag.flags.png}
+                      className=" w-full rounded-lg shadow-2xl object-cover"
+                      alt="country"
+                    />
+                  </figure>
+                )}
+              </>
+              <div className="flex flex-col">
+                {countries &&
+                  countries.map((question: any) => {
+                    return (
+                      <button
+                        disabled={disabled}
+                        onClick={(e) => handleClick(e, question.cca3)}
+                        key={question.cca3}
+                        className="btn my-3 btn-primary"
+                      >
+                        {question.translations.fra.common}
+                      </button>
+                    );
+                  })}
               </div>
-            </div>
-          </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-5xl font-bold my-6">Terminé !</h1>
+              <Counter value={score} />
+            </>
+          )}
         </>
       )}
     </>

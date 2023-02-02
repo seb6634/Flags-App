@@ -8,6 +8,7 @@ import "./App.css";
 import FavouritesCountries from "./components/FavouritesCountries/FavouritesCountries";
 import Game from "./components/Game/Game";
 import GamePage from "./components/GamePage/GamePage";
+import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
 import Nav from "./components/Nav/Nav";
 import NotFound from "./components/NotFound/NotFound";
@@ -45,8 +46,9 @@ function App() {
   };
 
   const addToFarovites = (cca3: string) => {
+    console.log("user:", user);
+
     if (!user) {
-      toast("Vous devez être connecté pour accéder à cette fonctionnalité !");
       return;
     }
     let favoritesCountries;
@@ -130,41 +132,43 @@ function App() {
           theme="dark"
           limit={1}
         />
-        <Routes>
-          <Route element={<Welcome onClick={onClick} />} path="/" />
-          <Route element={<GamePage user={user} />} path="/game-page" />
-          <Route element={<Game user={user} />} path="/game" />`
-          <Route element={<Login />} path="/login" />
-          <Route element={<Register />} path="/register" />
-          <Route
-            element={
-              <ResultPage
-                countries={countries}
-                addToFarovites={addToFarovites}
-                loading={loading}
-                notFound={notFound}
-                user={user}
-              />
-            }
-            path="/countries"
-          />
-          {/* ProtectedRoute */}
-          <Route path="/favorites" element={<ProtectedRoute />}>
+        <Layout>
+          <Routes>
+            <Route element={<Welcome onClick={onClick} />} path="/" />
+            <Route element={<GamePage user={user} />} path="/game-page" />
+            <Route element={<Game user={user} />} path="/game" />`
+            <Route element={<Login />} path="/login" />
+            <Route element={<Register />} path="/register" />
             <Route
-              path="/favorites"
               element={
-                <FavouritesCountries
+                <ResultPage
+                  countries={countries}
                   addToFarovites={addToFarovites}
+                  loading={loading}
+                  notFound={notFound}
                   user={user}
                 />
               }
+              path="/countries"
             />
-          </Route>
-          <Route path="/profile" element={<ProtectedRoute />}>
-            <Route path="/profile" element={<ProfilePage user={user} />} />
-          </Route>
-          <Route element={<NotFound />} path="*" />
-        </Routes>
+            {/* ProtectedRoute */}
+            <Route path="/favorites" element={<ProtectedRoute />}>
+              <Route
+                path="/favorites"
+                element={
+                  <FavouritesCountries
+                    addToFarovites={addToFarovites}
+                    user={user}
+                  />
+                }
+              />
+            </Route>
+            <Route path="/profile" element={<ProtectedRoute />}>
+              <Route path="/profile" element={<ProfilePage user={user} />} />
+            </Route>
+            <Route element={<NotFound />} path="*" />
+          </Routes>
+        </Layout>
 
         {/* <Footer></Footer> */}
       </Auth.Provider>
