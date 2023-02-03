@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Counter from "../Counter/Counter";
 import Loader from "../Loader/Loader";
 import Timer from "../Timer/Timer";
+import { User } from "../types";
 import { APIUrl } from "../utils";
 import "./Game.css";
 
 interface GameProps {
-  user?: any;
+  user?: User;
 }
 
 const Game: FC<GameProps> = ({ user }) => {
@@ -20,13 +21,11 @@ const Game: FC<GameProps> = ({ user }) => {
   const [end, setEnd] = useState(false);
   const [flag, setFlag] = useState({} as any);
   const [data, setData] = useState([] as any);
+  const gameDuration = 60;
   const navigate = useNavigate();
 
   const endOfTime = () => {
     setEnd(true);
-    setTimeout(() => {
-      navigate("/game-page");
-    }, 5000);
 
     if (user && score > user.best_score) {
       const partialUser = {
@@ -114,24 +113,19 @@ const Game: FC<GameProps> = ({ user }) => {
         <>
           {!end ? (
             <>
-              <span className="">
-                <Timer initialSeconds={60} endOfTime={endOfTime} />
-              </span>
-              <h1 className="text-2xl font-bold mb-20 mt-2">
-                Quel est ce pays ?
-              </h1>
-              <>
-                {flag && (
-                  <figure className="h-[300px] max-h[300px] object-contain">
+              <Timer initialSeconds={gameDuration} endOfTime={endOfTime} />
+              <div className="flex flex-col items-center">
+                <h1 className="text-2xl font-bold mt-2">Quel est ce pays ?</h1>
+                <>
+                  {flag && (
                     <img
                       src={flag.flags.png}
-                      className="w-screen rounded-lg shadow-2xl "
+                      className="rounded-lg shadow-2xl h-[250px] object-scale-down bg-base-100 my-4 "
                       alt="country"
                     />
-                  </figure>
-                )}
-              </>
-              <div className="flex flex-col">
+                  )}
+                </>
+
                 {countries &&
                   countries.map((question: any) => {
                     return (
@@ -139,7 +133,7 @@ const Game: FC<GameProps> = ({ user }) => {
                         disabled={disabled}
                         onClick={(e) => handleClick(e, question.cca3)}
                         key={question.cca3}
-                        className="btn my-3 btn-primary"
+                        className="btn my-3 min-w-[300px] btn-primary"
                       >
                         {question.translations.fra.common}
                       </button>
@@ -150,7 +144,15 @@ const Game: FC<GameProps> = ({ user }) => {
           ) : (
             <>
               <h1 className="text-5xl font-bold my-6">Terminé !</h1>
-              <Counter value={score} />
+              <div className="flex flex-col items-center gap-6">
+                <Counter value={score} />
+                <button
+                  className="btn btn-primary max-w-fit"
+                  onClick={() => navigate("/game-page")}
+                >
+                  Rejouer
+                </button>
+              </div>
             </>
           )}
         </>
