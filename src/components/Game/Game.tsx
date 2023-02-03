@@ -21,7 +21,7 @@ const Game: FC<GameProps> = ({ user }) => {
   const [end, setEnd] = useState(false);
   const [flag, setFlag] = useState({} as any);
   const [data, setData] = useState([] as any);
-  const gameDuration = 2;
+  const gameDuration = 60;
   const navigate = useNavigate();
 
   const endOfTime = () => {
