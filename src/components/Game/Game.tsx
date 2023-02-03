@@ -115,19 +115,17 @@ const Game: FC<GameProps> = ({ user }) => {
           {!end ? (
             <>
               <span className="">
-                <Timer
-                  initialMinute={0}
-                  initialSeconds={60}
-                  endOfTime={endOfTime}
-                />
+                <Timer initialSeconds={60} endOfTime={endOfTime} />
               </span>
-              <h1 className="text-2xl font-bold my-6">Quel est ce pays ?</h1>
+              <h1 className="text-2xl font-bold mb-20 mt-2">
+                Quel est ce pays ?
+              </h1>
               <>
                 {flag && (
-                  <figure className="my-6">
+                  <figure className="h-[300px] max-h[300px] object-contain">
                     <img
                       src={flag.flags.png}
-                      className=" w-full rounded-lg shadow-2xl object-cover"
+                      className="w-screen rounded-lg shadow-2xl "
                       alt="country"
                     />
                   </figure>
