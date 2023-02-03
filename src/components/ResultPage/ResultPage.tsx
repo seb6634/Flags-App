@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
+import NotResults from "../NotResults/NotResults";
 import { User } from "../types";
 import "./ResultPage.css";
 
@@ -35,7 +36,7 @@ const ResultPage: FC<ResultPageProps> = ({
               ></Hero>
             ))
           ) : (
-            <p>Aucun résultat</p>
+            <NotResults />
           )}
         </>
       )}

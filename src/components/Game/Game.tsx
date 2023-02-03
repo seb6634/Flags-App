@@ -87,6 +87,7 @@ const Game: FC<GameProps> = ({ user }) => {
 
   useEffect(() => {
     setDisabled(false);
+    setEnd(true);
     axios
       .get(`data/data.json`)
       // .get(`https://restcountries.com/v3.1/all`)
@@ -143,8 +144,9 @@ const Game: FC<GameProps> = ({ user }) => {
             </>
           ) : (
             <>
-              <h1 className="text-5xl font-bold my-6">Terminé !</h1>
               <div className="flex flex-col items-center gap-6">
+                <h1 className="text-5xl font-bold my-6">Terminé !</h1>
+
                 <Counter value={score} />
                 <button
                   className="btn btn-primary max-w-fit"
