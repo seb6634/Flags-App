@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
 import NotResults from "../NotResults/NotResults";
@@ -8,18 +8,22 @@ import "./ResultPage.css";
 interface ResultPageProps {
   countries: any;
   addToFarovites?: any;
-  loading?: boolean;
-  notFound?: boolean;
   user?: User;
 }
 
 const ResultPage: FC<ResultPageProps> = ({
   countries,
   addToFarovites,
-  loading,
-  notFound,
   user,
 }) => {
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  useEffect(() => {
+    setLoading(false);
+    if (countries.length === 0) {
+      setNotFound(true);
+    }
+  }, [countries.length]);
   return (
     <>
       {loading ? (

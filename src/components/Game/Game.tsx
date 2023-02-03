@@ -21,7 +21,7 @@ const Game: FC<GameProps> = ({ user }) => {
   const [end, setEnd] = useState(false);
   const [flag, setFlag] = useState({} as any);
   const [data, setData] = useState([] as any);
-  const gameDuration = 60;
+  const gameDuration = 2;
   const navigate = useNavigate();
 
   const endOfTime = () => {
@@ -87,10 +87,9 @@ const Game: FC<GameProps> = ({ user }) => {
 
   useEffect(() => {
     setDisabled(false);
-    setEnd(true);
     axios
-      .get(`data/data.json`)
-      // .get(`https://restcountries.com/v3.1/all`)
+      // .get(`data/data.json`)
+      .get(`https://restcountries.com/v3.1/all`)
       .then((response) => {
         setData(response.data);
         randomize(response.data);
@@ -153,6 +152,12 @@ const Game: FC<GameProps> = ({ user }) => {
                   onClick={() => navigate("/game-page")}
                 >
                   Rejouer
+                </button>
+                <button
+                  className="btn btn-primary max-w-fit"
+                  onClick={() => navigate("/")}
+                >
+                  Quitter
                 </button>
               </div>
             </>

@@ -27,8 +27,7 @@ function App() {
   const navigate = useNavigate();
   const [countries, setCountries] = useState<any[]>([]);
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getUser = () => {
     axios
@@ -88,8 +87,7 @@ function App() {
   };
 
   const onClick = (inputValue: string, selectValue: string) => {
-    if (inputValue.length < 3) return;
-    if (selectValue.length === 0) return;
+    setLoading(true);
     axios
       .get(
         selectValue === "name"
@@ -99,13 +97,12 @@ function App() {
       .then((response) => {
         setCountries(response.data);
         setLoading(false);
-        setNotFound(false);
         navigate("/countries");
-
-        if (response.data.status === 404) setNotFound(true);
       })
       .catch((er) => {
-        console.log("error:", er);
+        navigate("/countries");
+        setLoading(false);
+        setCountries([]);
       });
   };
 
@@ -134,7 +131,10 @@ function App() {
         />
         <Layout>
           <Routes>
-            <Route element={<Welcome onClick={onClick} />} path="/" />
+            <Route
+              element={<Welcome loading={loading} onClick={onClick} />}
+              path="/"
+            />
             <Route element={<GamePage user={user} />} path="/game-page" />
             <Route element={<Game user={user} />} path="/game" />`
             <Route element={<Login />} path="/login" />
@@ -144,8 +144,6 @@ function App() {
                 <ResultPage
                   countries={countries}
                   addToFarovites={addToFarovites}
-                  loading={loading}
-                  notFound={notFound}
                   user={user}
                 />
               }

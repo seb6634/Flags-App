@@ -16,9 +16,11 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
     if (number < 1000) {
       return number;
     } else if (number < 1000000) {
-      return Math.round(number / 1000) + "k";
+      return Math.round(number / 1000) + " Mille";
     } else if (number < 1000000000) {
-      return Math.round(number / 1000000) + "m";
+      return Math.round(number / 1000000) + " Million";
+    } else if (number < 1000000000000) {
+      return Math.round(number / 1000000000) + " Milliard";
     } else {
       return "Number too big";
     }
@@ -71,7 +73,7 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
         <p> {country.altSpellings.at(-1)}.</p>
         <p>Capitale: {country.capital}</p>
         <p>Population: {formatNumber(country.population)}</p>
-        <p>Superficie: {formatNumber(country.area) + "²"}</p>
+        <p>Superficie: {country.area + " km²"}</p>
         <p>Région: {country.region}</p>
         <p>Sous-région: {country.subregion}</p>
         <p>Code: {country.cca3}</p>

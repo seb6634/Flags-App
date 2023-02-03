@@ -1,22 +1,32 @@
 import { FC, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Auth } from "../../context/Auth";
 import "./Welcome.css";
 
 interface WelcomeProps {
   onClick: (inputValue: string, selectValue: string) => void;
+  loading: boolean;
 }
 
-const Welcome: FC<WelcomeProps> = ({ onClick }) => {
+const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
   const { isAuthenticated } = useContext(Auth);
   const [inputValue, setInputValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("name");
   const selectActionList = [
     { name: "name", label: "Nom" },
     { name: "capital", label: "Capitale" },
-    { name: "lang", label: "Language" },
+    { name: "lang", label: "Langue" },
     { name: "currency", label: "Monnaie" },
   ];
+
+  const selectionChange = (event: any) => {
+    if (event.target.value === "lang")
+      toast(
+        "Pour la recherche par langue, vous devez utilisez la recherche en Anglais."
+      );
+    setSelectValue(event.target.value);
+  };
 
   return (
     <>
@@ -28,7 +38,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick }) => {
         </p>
         <select
           value={selectValue}
-          onChange={(e) => setSelectValue(e.target.value)}
+          onChange={selectionChange}
           className="select select-bordered w-full max-w-xs my-3"
         >
           {selectActionList.map((action) => (
@@ -38,17 +48,26 @@ const Welcome: FC<WelcomeProps> = ({ onClick }) => {
           ))}
         </select>
         <input
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(event) => setInputValue(event.target.value)}
           type="search"
           placeholder="Votre recherche"
           className="input w-full max-w-xs"
         />
-        <button
-          onClick={() => onClick(inputValue, selectValue)}
-          className="btn btn-primary my-6"
-        >
-          Rechercher
-        </button>
+        {loading ? (
+          <button
+            onClick={() => onClick(inputValue, selectValue)}
+            className="btn loading btn-primary my-6 "
+          >
+            Rechercher
+          </button>
+        ) : (
+          <button
+            onClick={() => onClick(inputValue, selectValue)}
+            className="btn btn-primary my-6 "
+          >
+            Rechercher
+          </button>
+        )}
       </section>
 
       <section className="py-3 flex flex-col gap-5">
