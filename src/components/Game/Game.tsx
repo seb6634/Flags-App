@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,7 @@ import Timer from "../Timer/Timer";
 import { User } from "../types";
 import { APIUrl } from "../utils";
 import "./Game.css";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 interface GameProps {
   user?: User;
@@ -15,7 +17,7 @@ interface GameProps {
 const Game: FC<GameProps> = ({ user }) => {
   const [countries, setCountries] = useState<any>([]);
   const [score, setScore] = useState(0);
-  const [next, setNext] = useState(0);
+  const [nextStep, setNextStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [end, setEnd] = useState(false);
@@ -23,6 +25,7 @@ const Game: FC<GameProps> = ({ user }) => {
   const [data, setData] = useState([] as any);
   const gameDuration = 60;
   const navigate = useNavigate();
+  const fullScreen = useFullScreenHandle();
 
   const endOfTime = () => {
     setEnd(true);
@@ -81,11 +84,12 @@ const Game: FC<GameProps> = ({ user }) => {
     }
 
     setTimeout(() => {
-      setNext(next + 1);
+      setNextStep(nextStep + 1);
     }, 500);
   };
 
   useEffect(() => {
+    fullScreen.enter();
     setDisabled(false);
     axios
       // .get(`data/data.json`)
@@ -100,70 +104,78 @@ const Game: FC<GameProps> = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    if (next > 0) {
+    if (nextStep > 0) {
       randomize(data);
     }
-  }, [data, next]);
+  }, [data, nextStep]);
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {!end ? (
-            <>
-              <Timer initialSeconds={gameDuration} endOfTime={endOfTime} />
-              <div className="flex flex-col items-center">
-                <h1 className="text-2xl font-bold mt-2">Quel est ce pays ?</h1>
-                <>
-                  {flag && (
-                    <img
-                      src={flag.flags.png}
-                      className="rounded-lg shadow-2xl h-[250px] object-scale-down bg-base-100 my-4 "
-                      alt="country"
-                    />
-                  )}
-                </>
+      <FullScreen handle={fullScreen}>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {!end ? (
+              <>
+                <div className="flex justify-center mt-6">
+                  <Timer initialSeconds={gameDuration} endOfTime={endOfTime} />
+                </div>
+                <div className="flex flex-col items-center">
+                  <h1 className="text-2xl font-bold mt-2">
+                    Quel est ce pays ?
+                  </h1>
+                  <>
+                    {flag && (
+                      <img
+                        src={flag.flags.png}
+                        className="rounded-lg shadow-2xl h-[250px] object-scale-down bg-base-100 my-4 "
+                        alt="country"
+                      />
+                    )}
+                  </>
 
-                {countries &&
-                  countries.map((question: any) => {
-                    return (
-                      <button
-                        disabled={disabled}
-                        onClick={(e) => handleClick(e, question.cca3)}
-                        key={question.cca3}
-                        className="btn my-3 min-w-[300px] btn-primary"
-                      >
-                        {question.translations.fra.common}
-                      </button>
-                    );
-                  })}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col items-center gap-6">
-                <h1 className="text-5xl font-bold my-6">Terminé !</h1>
-
-                <Counter value={score} />
-                <button
-                  className="btn btn-primary max-w-fit"
-                  onClick={() => navigate("/game-page")}
-                >
-                  Rejouer
-                </button>
-                <button
-                  className="btn btn-primary max-w-fit"
-                  onClick={() => navigate("/")}
-                >
-                  Quitter
-                </button>
-              </div>
-            </>
-          )}
-        </>
-      )}
+                  {countries &&
+                    countries.map((question: any) => {
+                      return (
+                        <button
+                          disabled={disabled}
+                          onClick={(e) => handleClick(e, question.cca3)}
+                          key={question.cca3}
+                          className="btn my-3 min-w-[300px] btn-primary"
+                        >
+                          {question.translations.fra.common}
+                        </button>
+                      );
+                    })}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col items-center gap-6">
+                  <h1 className="text-5xl font-bold my-6">Terminé !</h1>
+                  <Counter
+                    value={score}
+                    numberOfQuestionsGenerated={nextStep}
+                  />
+                  <button
+                    className="btn btn-primary max-w-fit"
+                    onClick={() => navigate("/game-page")}
+                  >
+                    Rejouer
+                  </button>
+                  <button
+                    className="btn btn-primary max-w-fit"
+                    onClick={() => navigate("/")}
+                  >
+                    Quitter
+                  </button>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </FullScreen>
     </>
   );
 };
