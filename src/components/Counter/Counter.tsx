@@ -9,7 +9,7 @@ interface CounterProps {
 
 const Counter: FC<CounterProps> = ({
   value = 0,
-  label = "Score",
+  label = "Score final",
   numberOfQuestionsGenerated,
 }) => {
   const startValue = 0;
@@ -29,16 +29,16 @@ const Counter: FC<CounterProps> = ({
         }
         return newValue;
       });
-    }, 10);
+    }, 5);
     return () => clearInterval(timer);
   }, [endValue, duration]);
 
   return (
     <div className="stats stats-vertical lg:stats-horizontal shadow">
       <div className="stat">
-        <div className="stat-title">Score final</div>
+        <div className="stat-title">{label}</div>
         <div className="stat-value">
-          {parseFloat(currentValue.toFixed(1))}{" "}
+          {parseFloat(currentValue.toFixed(0))}{" "}
           {numberOfQuestionsGenerated
             ? `/ ${numberOfQuestionsGenerated}`
             : null}

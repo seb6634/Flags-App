@@ -33,7 +33,7 @@ const Timer: FC<TimerProps> = memo(
 
     const radialProgressStyle = {
       "--value": convertSecondsToPercentage(seconds),
-      "--size": "6rem",
+      "--size": "5rem",
     } as React.CSSProperties;
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const Timer: FC<TimerProps> = memo(
       };
     });
     return (
-      <div className="flex  items-center ">
+      <div className="flex items-center ">
         <div
           onClick={handleClick}
           className="radial-progress bg-primary text-primary-content border-4 border-primary"
