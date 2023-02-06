@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
-import { hasAuthenticated } from "../services/AuthApi";
-import { User } from "../types";
+import { hasAuthenticated } from "../../../services/AuthApi";
+import { User } from "../../types";
 import "./Hero.css";
 
 interface HeroProps {

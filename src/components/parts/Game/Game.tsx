@@ -1,12 +1,11 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { countriesAPIUrl, updateUser } from "../../../services/ApiRequests";
+import Timer from "../Timer/Timer";
+import { User } from "../../types";
 import Counter from "../Counter/Counter";
 import Loader from "../Loader/Loader";
-import { updateUser } from "../services/ApiRequests";
-import Timer from "../Timer/Timer";
-import { User } from "../types";
-import { countriesAPIUrl } from "../utils";
 import "./Game.css";
 
 interface GameProps {

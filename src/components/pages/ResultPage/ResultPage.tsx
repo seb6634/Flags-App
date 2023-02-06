@@ -1,8 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
-import Hero from "../Hero/Hero";
-import Loader from "../Loader/Loader";
-import NotResults from "../NotResults/NotResults";
-import { User } from "../types";
+import { FC, useEffect, useState } from "react";
+import Hero from "../../parts/Hero/Hero";
+import Loader from "../../parts/Loader/Loader";
+import NotResults from "../../parts/NotResults/NotResults";
+import { User } from "../../types";
+
 import "./ResultPage.css";
 
 interface ResultPageProps {

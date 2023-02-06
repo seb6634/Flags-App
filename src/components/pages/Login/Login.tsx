@@ -1,14 +1,16 @@
-import { FC, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { register } from "../services/AuthApi";
+import { Auth } from "../../../context/Auth";
+import { login } from "../../../services/AuthApi";
+import "./Login.css";
 
-const Register: FC = () => {
+interface LoginProps {}
+
+const Login: FC<LoginProps> = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
   const navigate = useNavigate();
-  const [usernameError, setUsernameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+
   const [user, setUser] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -22,35 +24,27 @@ const Register: FC = () => {
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    register(user)
-      .then((response) => {
-        if (response) {
-          navigate("/login");
-        }
-      })
-      .catch((error) => {
-        console.log("error:", error.response.data.errors);
-        error.response.data.errors.map((error: any) => {
-          if (error.field === "username") {
-            return setUsernameError(error.message);
-          }
-          if (error.field === "email") {
-            return setEmailError(error.message);
-          }
-          if (error.field === "password") {
-            return setPasswordError(error.message);
-          } else return [];
-        });
-      });
+    try {
+      const response = await login(user);
+      setIsAuthenticated(response);
+    } catch ({ response }) {
+      console.log(response);
+    }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <>
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Créer un compte!</h1>
+          <h1 className="text-5xl font-bold">Me connecter!</h1>
           <p className="py-6">
-            En créant un compte vous pourrez accéder à des fonctionnalités
+            En me connectant je peux accéder à des fonctionnalités
             supplémentaires comme la sauvegarde de vos scores. le changement de
             Thème, la sauvegarde de vos pays préférés.
           </p>
@@ -60,38 +54,18 @@ const Register: FC = () => {
             <form onSubmit={handleSubmit}>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Nom d'utilisateur</span>
-                </label>
-                <input
-                  id="username"
-                  type="text"
-                  name="username"
-                  required
-                  placeholder="pseudo"
-                  className="input input-bordered"
-                  onChange={handleChange}
-                />
-              </div>
-              {usernameError && (
-                <p className="text-sm text-red-500">{usernameError}</p>
-              )}
-              <div className="form-control">
-                <label className="label">
                   <span className="label-text">Email</span>
                 </label>
                 <input
                   id="email"
-                  type="text"
+                  type="email"
                   name="email"
                   required
-                  placeholder="exemple@email.com"
+                  placeholder="exemple@mail.com"
                   className="input input-bordered"
                   onChange={handleChange}
                 />
               </div>
-              {emailError && (
-                <p className="text-sm text-red-500">{emailError}</p>
-              )}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Mot de passe</span>
@@ -99,26 +73,23 @@ const Register: FC = () => {
                 <input
                   id="password"
                   type="password"
-                  name="password"
                   required
+                  name="password"
                   placeholder="********"
                   className="input input-bordered"
                   onChange={handleChange}
                 />
-                {passwordError && (
-                  <p className="text-sm text-red-500">{passwordError}</p>
-                )}
                 <label className="label">
                   <NavLink
-                    to={"/login"}
+                    to={"/register"}
                     className="label-text-alt link link-hover"
                   >
-                    Déja un compte?
+                    Pas encore de compte?
                   </NavLink>
                 </label>
               </div>
               <button type="submit" className="btn btn-primary">
-                Créer un compte
+                Connexion
               </button>
             </form>
           </div>
@@ -128,4 +99,4 @@ const Register: FC = () => {
   );
 };
 
-export default Register;
+export default Login;

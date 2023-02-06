@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { Auth } from "../../context/Auth";
-import { logout } from "../services/AuthApi";
+import { Auth } from "../../../context/Auth";
+import { logout } from "../../../services/AuthApi";
 import "./Nav.css";
 
 interface NavProps {}

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import Hero from "../Hero/Hero";
-import Loader from "../Loader/Loader";
-import NotResults from "../NotResults/NotResults";
-import { User } from "../types";
-import { countriesAPIUrl } from "../utils";
+import { countriesAPIUrl } from "../../../services/ApiRequests";
+import Hero from "../../parts/Hero/Hero";
+import Loader from "../../parts/Loader/Loader";
+import NotResults from "../../parts/NotResults/NotResults";
+import { User } from "../../types";
 import "./FavouritesCountries.css";
 
 interface FavouritesCountriesProps {
@@ -41,7 +41,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       setLoading(false);
       setNotFound(true);
     }
-  }, []);
+  }, [user]);
 
   return (
     <>

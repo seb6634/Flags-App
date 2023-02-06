@@ -1,7 +1,7 @@
 import { FC, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Auth } from "../../context/Auth";
+import { Auth } from "../../../context/Auth";
 import "./Welcome.css";
 
 interface WelcomeProps {

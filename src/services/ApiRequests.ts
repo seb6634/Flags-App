@@ -1,6 +1,8 @@
 import axios from "axios";
-import { User } from "../types";
-import { APIUrl } from "../utils";
+import { User } from "../components/types";
+
+export const APIUrl = "http://127.0.0.1:3333";
+export const countriesAPIUrl = "https://restcountries.com/v3.1";
 
 export const updateUser = async (partialUser: Partial<User>) => {
   const response = await axios.put(`${APIUrl}/users`, partialUser, {

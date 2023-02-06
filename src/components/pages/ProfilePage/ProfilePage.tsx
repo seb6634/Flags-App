@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
-import { updateUser } from "../services/ApiRequests";
-import { themesList } from "../services/ThemesList";
-import { User } from "../types";
+import { updateUser } from "../../../services/ApiRequests";
+import { themesList } from "../../../services/ThemesList";
+import { User } from "../../types";
 import "./ProfilePage.css";
 
 interface ProfilePageProps {

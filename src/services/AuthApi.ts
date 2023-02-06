@@ -1,10 +1,9 @@
 import axios from "axios";
-import { APIUrl } from "../utils";
+import { APIUrl } from "./ApiRequests";
 import { addItem, getItem, removeItem } from "./LocalStorage";
 
 export const hasAuthenticated = () => {
   const token = getItem("jwt");
-
   return !!token;
 };
 
