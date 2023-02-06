@@ -4,6 +4,7 @@ import Hero from "../Hero/Hero";
 import Loader from "../Loader/Loader";
 import NotResults from "../NotResults/NotResults";
 import { User } from "../types";
+import { countriesAPIUrl } from "../utils";
 import "./FavouritesCountries.css";
 
 interface FavouritesCountriesProps {
@@ -20,13 +21,14 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
   const [notFound, setNotFound] = useState(false);
 
   const getFavoritesCountries = (cca3: string) => {
+    const cca3Array = JSON.parse(cca3);
+    const cca3ArrayToString = cca3Array.toString();
     axios
-      .get(`https://restcountries.com/v3.1/alpha?codes=${cca3}`)
+      .get(`${countriesAPIUrl}/alpha?codes=${cca3ArrayToString}`)
       .then((response) => {
         setCountries(response.data);
       })
       .catch((er) => {
-        setNotFound(true);
         console.log("error:", er);
       });
   };
@@ -39,7 +41,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       setLoading(false);
       setNotFound(true);
     }
-  }, [user]);
+  }, []);
 
   return (
     <>
@@ -47,10 +49,10 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
         <Loader />
       ) : (
         <>
-          {!notFound ? (
+          {!notFound && countries.length > 0 ? (
             countries.map((country: any) => (
               <Hero
-                key={country.cca3.toString()}
+                key={country.cca3}
                 country={country}
                 addToFarovites={addToFarovites}
                 user={user}

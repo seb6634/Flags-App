@@ -1,8 +1,7 @@
-import axios from "axios";
 import { FC, useEffect, useState } from "react";
+import { updateUser } from "../services/ApiRequests";
 import { themesList } from "../services/ThemesList";
 import { User } from "../types";
-import { APIUrl } from "../utils";
 import "./ProfilePage.css";
 
 interface ProfilePageProps {
@@ -10,38 +9,17 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(user?.theme ?? "dark");
 
   const changeTheme = (event: any) => {
-    if (user) {
-      const partialUser = {
-        theme: event.target.value,
-      };
-      axios
-        .put(
-          `${APIUrl}/users`,
-          {
-            partialUser,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.jwt}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log("response:", response);
-          setTheme(response.data.theme);
-        })
-        .catch((er) => {
-          console.log("error:", er);
-        });
-    }
+    updateUser({ theme: event.target.value }).then((response) => {
+      setTheme(response.data.theme);
+      console.log("response.data.theme:", response.data.theme);
+    });
   };
   useEffect(() => {
-    if (user)
-      document.querySelector("html")?.setAttribute("data-theme", user.theme);
-  }, [user]);
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+  }, [theme]);
   return (
     <>
       <h1 className="text-5xl font-bold mb-5">Profile</h1>

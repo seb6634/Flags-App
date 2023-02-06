@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -16,9 +15,10 @@ import ProfilePage from "./components/ProfilePage/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Register from "./components/Register/Register";
 import ResultPage from "./components/ResultPage/ResultPage";
+import { getUser, updateUser } from "./components/services/ApiRequests";
 import { hasAuthenticated } from "./components/services/AuthApi";
 import { User } from "./components/types";
-import { APIUrl, countriesAPIUrl } from "./components/utils";
+import { countriesAPIUrl } from "./components/utils";
 import Welcome from "./components/Welcome/Welcome";
 import { Auth } from "./context/Auth";
 
@@ -29,60 +29,26 @@ function App() {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
-  const getUser = () => {
-    axios
-      .get(`${APIUrl}/user`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.jwt}`,
-        },
-      })
+  const addToFarovites = (cca3: string) => {
+    if (!user) {
+      return;
+    }
+    let favoritesCountries = JSON.parse(user.favorites_countries ?? "[]");
+    if (favoritesCountries.includes(cca3)) {
+      favoritesCountries = favoritesCountries.filter(
+        (country: string) => country !== cca3
+      );
+    } else {
+      favoritesCountries = [...favoritesCountries, cca3];
+    }
+    favoritesCountries = JSON.stringify(favoritesCountries);
+
+    updateUser({ favorites_countries: favoritesCountries })
       .then((response) => {
         setUser(response.data);
       })
       .catch((er) => {
         console.log("error:", er);
-      });
-  };
-
-  const addToFarovites = (cca3: string) => {
-    console.log("user:", user);
-
-    if (!user) {
-      return;
-    }
-    let favoritesCountries;
-    if (user.favorites_countries) {
-      const userFavoritesToArr = user.favorites_countries.split(",");
-      favoritesCountries = userFavoritesToArr.includes(cca3)
-        ? userFavoritesToArr
-            .filter((country: string) => country !== cca3)
-            .join(",")
-        : [...userFavoritesToArr, cca3].join(",");
-
-      if (Array.from(favoritesCountries)[0] === ",") {
-        favoritesCountries = favoritesCountries.slice(1);
-      }
-    }
-    const partialUser = {
-      id: user.id,
-      favorites_countries: favoritesCountries ?? cca3,
-    };
-    // update user
-    axios
-      .put(
-        `${APIUrl}/users`,
-        {
-          partialUser,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.jwt}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response:", response);
-        setUser(response.data);
       });
   };
 
@@ -107,16 +73,17 @@ function App() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) getUser();
-    else {
+    if (isAuthenticated) {
+      getUser().then((response) => {
+        setUser(response.data);
+        document
+          .querySelector("html")
+          ?.setAttribute("data-theme", response.data.theme ?? "dark");
+      });
+    } else {
       navigate("/");
     }
-  }, []);
-
-  useEffect(() => {
-    if (user)
-      document.querySelector("html")?.setAttribute("data-theme", user.theme);
-  }, [user]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <>

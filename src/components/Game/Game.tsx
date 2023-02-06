@@ -3,9 +3,10 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Counter from "../Counter/Counter";
 import Loader from "../Loader/Loader";
+import { updateUser } from "../services/ApiRequests";
 import Timer from "../Timer/Timer";
 import { User } from "../types";
-import { APIUrl } from "../utils";
+import { countriesAPIUrl } from "../utils";
 import "./Game.css";
 
 interface GameProps {
@@ -28,28 +29,9 @@ const Game: FC<GameProps> = ({ user }) => {
     setEnd(true);
 
     if (user && score > user.best_score) {
-      const partialUser = {
-        id: user.id,
-        best_score: score,
-      };
-      axios
-        .put(
-          `${APIUrl}/users`,
-          {
-            partialUser,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.jwt}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log("response:", response);
-        })
-        .catch((er) => {
-          console.log("error:", er);
-        });
+      updateUser({ best_score: score }).catch((er) => {
+        console.log("error:", er);
+      });
     }
   };
 
@@ -89,7 +71,7 @@ const Game: FC<GameProps> = ({ user }) => {
     setDisabled(false);
     axios
       // .get(`data/data.json`)
-      .get(`https://restcountries.com/v3.1/all`)
+      .get(`${countriesAPIUrl}/all`)
       .then((response) => {
         setData(response.data);
         randomize(response.data);
