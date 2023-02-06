@@ -22,17 +22,25 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
   }, [theme]);
   return (
     <>
-      <h1 className="text-5xl font-bold mb-5">Profile</h1>
-      <span className="label-text">Pick the best fantasy franchise</span>
-      <select
-        value={theme}
-        onChange={changeTheme}
-        className="select select-primary w-full max-w-xs"
-      >
-        {themesList.map((theme) => (
-          <option key={theme}>{theme}</option>
-        ))}
-      </select>
+      <h1 className="text-5xl font-bold mb-5">Preferences</h1>
+      {user && (
+        <div className="flex flex-col gap-6">
+          <p>Email: {user.email}</p>
+          <p>Pseudo: {user.username}</p>
+          <p>
+            Theme:
+            <select
+              value={theme}
+              onChange={changeTheme}
+              className="select select-primary w-full max-w-xs"
+            >
+              {themesList.map((theme) => (
+                <option key={theme}>{theme}</option>
+              ))}
+            </select>
+          </p>
+        </div>
+      )}
     </>
   );
 };

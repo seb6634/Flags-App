@@ -79,8 +79,6 @@ function App() {
           .querySelector("html")
           ?.setAttribute("data-theme", response.data.theme ?? "dark");
       });
-    } else {
-      navigate("/");
     }
   }, [isAuthenticated, navigate]);
 

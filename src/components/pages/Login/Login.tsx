@@ -8,6 +8,7 @@ interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -24,12 +25,21 @@ const Login: FC<LoginProps> = () => {
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    try {
-      const response = await login(user);
-      setIsAuthenticated(response);
-    } catch ({ response }) {
-      console.log(response);
-    }
+    login(user)
+      .then((response) => {
+        setIsAuthenticated(response);
+      })
+      .catch((error) => {
+        if (
+          error.response.data.errors[0].message ===
+            "E_INVALID_AUTH_UID: User not found" ||
+          "E_INVALID_AUTH_PASSWORD: Password mismatch"
+        )
+          setError("Email ou mot de passe incorrect");
+        else {
+          setError("une erreur est survenue");
+        }
+      });
   };
 
   useEffect(() => {
@@ -53,6 +63,7 @@ const Login: FC<LoginProps> = () => {
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="form-control">
+                {error && <p className="text-sm text-red-500">{error}</p>}
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
