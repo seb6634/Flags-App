@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
+
 import "./Counter.css";
 
 interface CounterProps {
@@ -10,12 +11,25 @@ interface CounterProps {
 const Counter: FC<CounterProps> = ({
   value = 0,
   label = "Score final",
-  numberOfQuestionsGenerated,
+  numberOfQuestionsGenerated = 0,
 }) => {
   const startValue = 0;
   const endValue = value;
   const duration = 100;
   const [currentValue, setCurrentValue] = useState(startValue);
+
+  const convertAnswersToPercentage = (seconds: number) => {
+    return fixValue((seconds / numberOfQuestionsGenerated) * 100);
+  };
+
+  const fixValue = (value: number) => {
+    return parseFloat(value.toFixed(0));
+  };
+
+  const radialProgressStyle = {
+    "--value": convertAnswersToPercentage(currentValue),
+    "--size": "5rem",
+  } as React.CSSProperties;
 
   useEffect(() => {
     const increment = (endValue - startValue) / duration;
@@ -38,17 +52,18 @@ const Counter: FC<CounterProps> = ({
       <div className="stat">
         <div className="stat-title">{label}</div>
         <div className="stat-value">
-          {parseFloat(currentValue.toFixed(0))}{" "}
+          {fixValue(currentValue)}
           {numberOfQuestionsGenerated
-            ? `/ ${numberOfQuestionsGenerated}`
+            ? ` / ${numberOfQuestionsGenerated}`
             : null}
         </div>
       </div>
 
-      {/* <div className="stat">
-        <div className="stat-title">Nombres de questions</div>
-        <div className="stat-value">12</div>
-      </div> */}
+      <div className="stat">
+        <div className="radial-progress" style={radialProgressStyle}>
+          {`${convertAnswersToPercentage(currentValue)}%`}
+        </div>
+      </div>
     </div>
   );
 };

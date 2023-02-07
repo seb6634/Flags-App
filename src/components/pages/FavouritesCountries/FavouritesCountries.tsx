@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { countriesAPIUrl } from "../../../services/ApiRequests";
-import Hero from "../../parts/Hero/Hero";
+import Card from "../../parts/Hero/Card";
 import Loader from "../../parts/Loader/Loader";
 import NotResults from "../../parts/NotResults/NotResults";
 import { Country, User } from "../../types";
@@ -51,12 +51,12 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
         <>
           {!notFound && countries.length > 0 ? (
             countries.map((country: Country) => (
-              <Hero
+              <Card
                 key={country.cca3}
                 country={country}
                 addToFarovites={addToFarovites}
                 user={user}
-              ></Hero>
+              ></Card>
             ))
           ) : (
             <NotResults message={"Aucun favoris"} />

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import Hero from "../../parts/Hero/Hero";
+import Card from "../../parts/Hero/Card";
 import Loader from "../../parts/Loader/Loader";
 import NotResults from "../../parts/NotResults/NotResults";
 import { Country, User } from "../../types";
@@ -33,12 +33,12 @@ const ResultPage: FC<ResultPageProps> = ({
         <>
           {!notFound ? (
             countries.map((country: Country) => (
-              <Hero
+              <Card
                 key={country.cca3.toString()}
                 country={country}
                 addToFarovites={addToFarovites}
                 user={user}
-              ></Hero>
+              ></Card>
             ))
           ) : (
             <NotResults />

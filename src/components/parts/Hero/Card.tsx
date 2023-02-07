@@ -1,15 +1,15 @@
 import { FC, useState } from "react";
 import { hasAuthenticated } from "../../../services/AuthApi";
 import { Country, User } from "../../types";
-import "./Hero.css";
+import "./Card.css";
 
-interface HeroProps {
+interface CardProps {
   country: Country;
   addToFarovites: (cca3: string) => void;
   user?: User;
 }
 
-const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
+const Card: FC<CardProps> = ({ country, addToFarovites, user }) => {
   const [isAuthenticated] = useState(hasAuthenticated());
 
   const formatNumber = (number: number) => {
@@ -27,7 +27,7 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
   };
 
   return (
-    <div className="card w-full lg:w-1/3 bg-base-100 shadow-xl break-words p-2">
+    <div className="card w-full bg-base-100 shadow-xl break-words p-2">
       <>
         <div className="card-body items-center text-center ">
           <h2 className="card-title  ">{country.translations.fra.common}</h2>
@@ -82,4 +82,4 @@ const Hero: FC<HeroProps> = ({ country, addToFarovites, user }) => {
   );
 };
 
-export default Hero;
+export default Card;
