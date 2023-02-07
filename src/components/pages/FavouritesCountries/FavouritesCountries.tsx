@@ -4,11 +4,11 @@ import { countriesAPIUrl } from "../../../services/ApiRequests";
 import Hero from "../../parts/Hero/Hero";
 import Loader from "../../parts/Loader/Loader";
 import NotResults from "../../parts/NotResults/NotResults";
-import { User } from "../../types";
+import { Country, User } from "../../types";
 import "./FavouritesCountries.css";
 
 interface FavouritesCountriesProps {
-  addToFarovites?: any;
+  addToFarovites: (cca3: Country["cca3"]) => void;
   user?: User;
 }
 
@@ -16,7 +16,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
   addToFarovites,
   user,
 }) => {
-  const [countries, setCountries] = useState<any[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -50,7 +50,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       ) : (
         <>
           {!notFound && countries.length > 0 ? (
-            countries.map((country: any) => (
+            countries.map((country: Country) => (
               <Hero
                 key={country.cca3}
                 country={country}

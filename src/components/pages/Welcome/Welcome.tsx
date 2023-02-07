@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { ChangeEvent, FC, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Auth } from "../../../context/Auth";
@@ -20,7 +20,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
     { name: "currency", label: "Monnaie" },
   ];
 
-  const selectionChange = (event: any) => {
+  const selectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value === "lang")
       toast(
         "Pour la recherche par langue, vous devez utilisez la recherche en Anglais."

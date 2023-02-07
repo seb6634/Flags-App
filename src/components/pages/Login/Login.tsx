@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Auth } from "../../../context/Auth";
 import { login } from "../../../services/AuthApi";
@@ -16,7 +16,7 @@ const Login: FC<LoginProps> = () => {
     password: "",
   });
 
-  const handleChange = ({ currentTarget }: any) => {
+  const handleChange = ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = currentTarget;
 
     setUser({ ...user, [name]: value });

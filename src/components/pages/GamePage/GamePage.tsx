@@ -1,10 +1,11 @@
 import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 import Counter from "../../parts/Counter/Counter";
+import { User } from "../../types";
 import "./GamePage.css";
 
 interface GamePageProps {
-  user?: any;
+  user?: User;
 }
 
 const GamePage: FC<GamePageProps> = ({ user }) => (

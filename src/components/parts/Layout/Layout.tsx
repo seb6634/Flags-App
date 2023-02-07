@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import "./Layout.css";
 
 interface LayoutProps {
-  children: any;
+  children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => (

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { updateUser } from "../../../services/ApiRequests";
 import { themesList } from "../../../services/ThemesList";
 import { User } from "../../types";
@@ -11,7 +11,7 @@ interface ProfilePageProps {
 const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
   const [theme, setTheme] = useState(user?.theme ?? "dark");
 
-  const changeTheme = (event: any) => {
+  const changeTheme = (event: ChangeEvent<HTMLSelectElement>) => {
     updateUser({ theme: event.target.value }).then((response) => {
       setTheme(response.data.theme);
       console.log("response.data.theme:", response.data.theme);

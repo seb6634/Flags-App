@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { register } from "../../../services/AuthApi";
 
@@ -13,7 +13,7 @@ const Register: FC = () => {
     password: "",
   });
 
-  const handleChange = ({ currentTarget }: any) => {
+  const handleChange = ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = currentTarget;
 
     setUser({ ...user, [name]: value });
@@ -29,7 +29,6 @@ const Register: FC = () => {
         }
       })
       .catch((error) => {
-        console.log("error:", error.response.data.errors);
         error.response.data.errors.map((error: any) => {
           if (error.field === "username") {
             return setUsernameError(error.message);

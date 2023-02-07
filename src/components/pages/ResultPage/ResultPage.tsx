@@ -2,13 +2,13 @@ import { FC, useEffect, useState } from "react";
 import Hero from "../../parts/Hero/Hero";
 import Loader from "../../parts/Loader/Loader";
 import NotResults from "../../parts/NotResults/NotResults";
-import { User } from "../../types";
+import { Country, User } from "../../types";
 
 import "./ResultPage.css";
 
 interface ResultPageProps {
-  countries: any;
-  addToFarovites?: any;
+  countries: Country[];
+  addToFarovites: (cca3: Country["cca3"]) => void;
   user?: User;
 }
 
@@ -32,7 +32,7 @@ const ResultPage: FC<ResultPageProps> = ({
       ) : (
         <>
           {!notFound ? (
-            countries.map((country: any) => (
+            countries.map((country: Country) => (
               <Hero
                 key={country.cca3.toString()}
                 country={country}

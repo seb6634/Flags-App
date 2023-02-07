@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
 import { hasAuthenticated } from "../../../services/AuthApi";
-import { User } from "../../types";
+import { Country, User } from "../../types";
 import "./Hero.css";
 
 interface HeroProps {
-  country: any;
+  country: Country;
   addToFarovites: (cca3: string) => void;
   user?: User;
 }

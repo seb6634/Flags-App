@@ -10,7 +10,7 @@ import NotFound from "./components/pages/NotFound/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { countriesAPIUrl, getUser, updateUser } from "./services/ApiRequests";
 import { hasAuthenticated } from "./services/AuthApi";
-import { User } from "./components/types";
+import { Country, User } from "./components/types";
 import { Auth } from "./context/Auth";
 import GamePage from "./components/pages/GamePage/GamePage";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
@@ -24,7 +24,7 @@ import Nav from "./components/parts/Nav/Nav";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
   const navigate = useNavigate();
-  const [countries, setCountries] = useState<any[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
