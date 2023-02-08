@@ -26,11 +26,14 @@ const Game: FC<GameProps> = ({ user }) => {
 
   const endOfTime = () => {
     setEnd(true);
-
     if (user && score > user.best_score) {
-      updateUser({ best_score: score }).catch((er) => {
-        console.log("error:", er);
-      });
+      updateUser({ best_score: score })
+        .then((response) => {
+          console.log("response:", response);
+        })
+        .catch((er) => {
+          console.log("er:", er);
+        });
     }
   };
 
@@ -75,6 +78,7 @@ const Game: FC<GameProps> = ({ user }) => {
 
   useEffect(() => {
     if (nextStep > 0) {
+      console.log("nextStep:", nextStep);
       randomize(countriesData);
     }
   }, [countriesData, nextStep]);
@@ -121,7 +125,11 @@ const Game: FC<GameProps> = ({ user }) => {
             <>
               <div className="flex flex-col items-center gap-6">
                 <h1 className="text-5xl font-bold my-6">Terminé !</h1>
-                <Counter value={score} numberOfQuestionsGenerated={nextStep} />
+                <Counter
+                  user={user}
+                  value={score}
+                  numberOfQuestionsGenerated={nextStep}
+                />
                 <button
                   className="btn btn-primary max-w-fit"
                   onClick={() => navigate("/game-page")}

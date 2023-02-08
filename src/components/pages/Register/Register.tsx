@@ -29,6 +29,7 @@ const Register: FC = () => {
         }
       })
       .catch((error) => {
+        console.log("error:", error);
         error.response.data.errors.map((error: any) => {
           if (error.field === "username") {
             return setUsernameError(error.message);

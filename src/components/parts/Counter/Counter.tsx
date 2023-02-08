@@ -1,18 +1,23 @@
 import React, { FC, useEffect, useState } from "react";
+import { User } from "../../types";
 
 import "./Counter.css";
 
 interface CounterProps {
+  user?: User;
   value: number;
   label?: string;
   numberOfQuestionsGenerated?: number;
 }
 
 const Counter: FC<CounterProps> = ({
+  user,
   value = 0,
   label = "Score final",
   numberOfQuestionsGenerated = 0,
 }) => {
+  console.log("value:", value);
+
   const startValue = 0;
   const endValue = value;
   const duration = 100;
@@ -28,7 +33,6 @@ const Counter: FC<CounterProps> = ({
 
   const radialProgressStyle = {
     "--value": convertAnswersToPercentage(currentValue),
-    "--size": "5rem",
   } as React.CSSProperties;
 
   useEffect(() => {
@@ -59,11 +63,24 @@ const Counter: FC<CounterProps> = ({
         </div>
       </div>
 
-      <div className="stat">
-        <div className="radial-progress" style={radialProgressStyle}>
-          {`${convertAnswersToPercentage(currentValue)}%`}
+      {numberOfQuestionsGenerated > 0 && (
+        <div className="stat">
+          <div className="">
+            <div className="radial-progress" style={radialProgressStyle}>
+              {`${convertAnswersToPercentage(currentValue)}%`}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {user?.best_score && (
+        <div className="stat">
+          <div className="stat-title">Meilleur score</div>
+          <div className="stat-value" style={radialProgressStyle}>
+            {user.best_score}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
