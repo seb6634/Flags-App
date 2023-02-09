@@ -33,16 +33,6 @@ const Login: FC<LoginProps> = () => {
         if (error.message) {
           setError(error.message);
         }
-        console.log("error:", error);
-        if (
-          error.response.data.errors[0].message ===
-            "E_INVALID_AUTH_UID: User not found" ||
-          "E_INVALID_AUTH_PASSWORD: Password mismatch"
-        )
-          setError("Email ou mot de passe incorrect");
-        else {
-          setError("une erreur est survenue");
-        }
       });
   };
 
