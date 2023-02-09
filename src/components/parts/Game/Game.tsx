@@ -13,63 +13,90 @@ interface GameProps {
 }
 
 const Game: FC<GameProps> = ({ user }) => {
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [score, setScore] = useState(0);
-  const [nextStep, setNextStep] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [disabled, setDisabled] = useState(false);
-  const [end, setEnd] = useState(false);
-  const [country, setCountry] = useState<Country | null>(null);
-  const [countriesData, setCountriesData] = useState<Country[]>([]);
-  const gameDuration = 6;
+  const [gameState, setGameState] = useState<{
+    countries: Country[];
+    score: number;
+    nextStep: number;
+    loading: boolean;
+    disabled: boolean;
+    end: boolean;
+    country: Country | null;
+    countriesData: Country[];
+  }>({
+    countries: [],
+    score: 0,
+    nextStep: 0,
+    loading: true,
+    disabled: false,
+    end: false,
+    country: null,
+    countriesData: [],
+  });
+
+  const gameDuration = 60;
   const navigate = useNavigate();
 
-  const endOfTime = () => {
-    setEnd(true);
+  const {
+    countries,
+    score,
+    nextStep,
+    loading,
+    disabled,
+    end,
+    country,
+    countriesData,
+  } = gameState;
+
+  function endOfTime() {
+    setGameState((prevState) => ({ ...prevState, end: true }));
+    console.log("score:", score);
     if (user && score > user.best_score) {
-      updateUser({ best_score: score })
-        .then((response) => {
-          console.log("response:", response);
-        })
-        .catch((er) => {
-          console.log("er:", er);
-        });
+      updateUser({ best_score: score });
     }
-  };
+  }
 
   const randomize = (country: Country[]) => {
     const shuffledData = country.sort(() => Math.random() - 0.5);
     const randomCountries = shuffledData.slice(0, 4);
-    setCountries(randomCountries);
+    setGameState((prevState) => ({ ...prevState, countries: randomCountries }));
     const randomCountry =
       randomCountries[Math.floor(Math.random() * randomCountries.length)];
-    setCountry(randomCountry);
-    setDisabled(false);
+    setGameState((prevState) => ({ ...prevState, country: randomCountry }));
+    setGameState((prevState) => ({ ...prevState, disabled: false }));
   };
 
-  const handleClick = (event: any, code: string) => {
-    setScore(score + 1);
-    setDisabled(true);
+  function handleClick(event: any, code: string | undefined) {
+    setGameState((prevState) => ({ ...prevState, disabled: true }));
     if (code === country?.cca3) {
       event.target.style.backgroundColor = "green";
+      setGameState((prevState) => ({
+        ...prevState,
+        score: prevState.score + 1,
+      }));
+      console.log("score:", score);
     } else {
       event.target.style.backgroundColor = "red";
     }
 
     setTimeout(() => {
-      setNextStep(nextStep + 1);
+      setGameState((prevState) => ({
+        ...prevState,
+        nextStep: prevState.nextStep + 1,
+      }));
     }, 500);
-  };
+  }
 
   useEffect(() => {
-    setDisabled(false);
+    setGameState((prevState) => ({ ...prevState, disabled: false }));
     axios
-      // .get(`data/data.json`)
       .get(`${countriesAPIUrl}/all`)
       .then((response) => {
-        setCountriesData(response.data);
+        setGameState((prevState) => ({
+          ...prevState,
+          countriesData: response.data,
+        }));
         randomize(response.data);
-        setLoading(false);
+        setGameState((prevState) => ({ ...prevState, loading: false }));
       })
       .catch((er) => {
         console.log("error:", er);

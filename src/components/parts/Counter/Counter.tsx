@@ -16,38 +16,30 @@ const Counter: FC<CounterProps> = ({
   label = "Score final",
   numberOfQuestionsGenerated = 0,
 }) => {
-  const startValue = 0;
-  const endValue = value;
-  const duration = 100;
-  const [currentValue, setCurrentValue] = useState(startValue);
-
-  const convertAnswersToPercentage = (seconds: number) => {
-    return fixValue((seconds / numberOfQuestionsGenerated) * 100);
-  };
-
-  const fixValue = (value: number) => {
-    return parseFloat(value.toFixed(0));
-  };
-
-  const radialProgressStyle = {
-    "--value": convertAnswersToPercentage(currentValue),
-  } as React.CSSProperties;
+  const [currentValue, setCurrentValue] = useState(0);
 
   useEffect(() => {
-    const increment = (endValue - startValue) / duration;
-
+    const increment = (value - 0) / 100;
     const timer = setInterval(() => {
-      setCurrentValue((currentValue) => {
-        const newValue = currentValue + increment;
-        if (newValue >= endValue) {
+      setCurrentValue((current) => {
+        const newValue = current + increment;
+        if (newValue >= value) {
           clearInterval(timer);
-          return endValue;
+          return value;
         }
         return newValue;
       });
     }, 5);
     return () => clearInterval(timer);
-  }, [endValue, duration]);
+  }, [value]);
+
+  const fixValue = (val: number) =>
+    Number.isNaN(val) || val === 0 ? undefined : parseFloat(val.toFixed(0));
+
+  const percentage = fixValue(
+    (currentValue / numberOfQuestionsGenerated) * 100
+  );
+  const radialProgressStyle = { "--value": percentage } as React.CSSProperties;
 
   return (
     <div className="stats stats-vertical lg:stats-horizontal shadow">
@@ -55,9 +47,7 @@ const Counter: FC<CounterProps> = ({
         <div className="stat-title">{label}</div>
         <div className="stat-value">
           {fixValue(currentValue)}
-          {numberOfQuestionsGenerated
-            ? ` / ${numberOfQuestionsGenerated}`
-            : null}
+          {numberOfQuestionsGenerated ? ` / ${numberOfQuestionsGenerated}` : 0}
         </div>
       </div>
 
@@ -65,13 +55,13 @@ const Counter: FC<CounterProps> = ({
         <div className="stat">
           <div className="">
             <div className="radial-progress" style={radialProgressStyle}>
-              {`${convertAnswersToPercentage(currentValue)}%`}
+              {`${percentage}%`}
             </div>
           </div>
         </div>
       )}
 
-      {user?.best_score && (
+      {user && user?.best_score > 0 && (
         <div className="stat">
           <div className="stat-title">Meilleur score</div>
           <div className="stat-value" style={radialProgressStyle}>

@@ -48,7 +48,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
           ))}
         </select>
         <input
-          onChange={(event) => setInputValue(event.target.value)}
+          onChange={(event) => setInputValue(event.target.value.toLowerCase())}
           type="search"
           placeholder="Votre recherche"
           className="input w-full max-w-xs"

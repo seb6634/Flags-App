@@ -14,8 +14,13 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
   const changeTheme = (event: ChangeEvent<HTMLSelectElement>) => {
     updateUser({ theme: event.target.value }).then((response) => {
       setTheme(response.data.theme);
-      console.log("response.data.theme:", response.data.theme);
     });
+  };
+  const [selectedValue, setSelectedValue] = useState("");
+  const options: string[] = ["avatar/avatar-1.png", "avatar/avatar-2.png"];
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedValue(event.target.value);
   };
   useEffect(() => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
@@ -27,18 +32,41 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
         <div className="flex flex-col gap-6">
           <p>Email: {user.email}</p>
           <p>Pseudo: {user.username}</p>
-          <p>
+          {user.best_score > 0 && <p>Meilleur score: {user.username}</p>}
+          <div>
             Theme:
             <select
               value={theme}
               onChange={changeTheme}
-              className="select select-primary w-full max-w-xs"
+              className="select select-primary w-1/2 max-w-xs ml-2"
             >
               {themesList.map((theme) => (
                 <option key={theme}>{theme}</option>
               ))}
             </select>
-          </p>
+          </div>
+          <div>
+            Avatar:
+            <select
+              className="select select-primary w-1/2 max-w-xs ml-2"
+              value={selectedValue}
+              onChange={handleChange}
+            >
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <br />
+            <br />
+            {selectedValue && (
+              <img
+                src={options.find((option) => option === selectedValue)}
+                alt="selected value"
+              />
+            )}
+          </div>
         </div>
       )}
     </>

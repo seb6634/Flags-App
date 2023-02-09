@@ -11,7 +11,7 @@ interface GamePageProps {
 const GamePage: FC<GamePageProps> = ({ user }) => (
   <>
     <div className="my-6">
-      {user && user.best_score && (
+      {user && user.best_score > 0 && (
         <>
           <Counter value={user.best_score} label={"Votre meilleur score:"} />
         </>

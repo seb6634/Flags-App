@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { User } from "../components/types";
 import { APIUrl } from "./ApiRequests";
 import { addItem, getItem, removeItem } from "./LocalStorage";
@@ -12,14 +13,15 @@ export const login = async (credentials: Partial<User>) => {
   const response = await axios.post(`${APIUrl}/users/login`, credentials);
   const token = response.data.token.token;
   addItem("jwt", token);
-  return true;
+  return response;
 };
 
 export const register = async (credentials: Partial<User>) => {
-  await axios.post(`${APIUrl}/users`, credentials);
-  return true;
+  const response = await axios.post(`${APIUrl}/users`, credentials);
+  return response;
 };
 
 export const logout = () => {
   removeItem("jwt");
+  toast(`Vous êtes maintenant déconnecté`);
 };

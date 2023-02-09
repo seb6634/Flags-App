@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Auth } from "../../../context/Auth";
 import { login } from "../../../services/AuthApi";
 import "./Login.css";
@@ -27,11 +28,14 @@ const Login: FC<LoginProps> = () => {
 
     login(user)
       .then((response) => {
-        setIsAuthenticated(response);
+        if (response.status === 200) {
+          toast(`Bienvenue ${response.data.username}!`);
+          setIsAuthenticated(true);
+        }
       })
       .catch((error) => {
-        if (error.message) {
-          setError(error.message);
+        if (error.response.data.error) {
+          setError(error.response.data.error);
         }
       });
   };

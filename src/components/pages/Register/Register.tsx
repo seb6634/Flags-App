@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { register } from "../../../services/AuthApi";
 
 const Register: FC = () => {
@@ -24,12 +25,12 @@ const Register: FC = () => {
 
     register(user)
       .then((response) => {
-        if (response) {
+        if (response.status === 201) {
           navigate("/login");
+          toast("Votre compte a bien été créé, vous pouvez vous connecter!");
         }
       })
       .catch((error) => {
-        console.log("error:", error);
         error.response.data.errors.map((error: any) => {
           if (error.field === "username") {
             return setUsernameError(error.message);
