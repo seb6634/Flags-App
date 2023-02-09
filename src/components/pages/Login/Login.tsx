@@ -30,6 +30,10 @@ const Login: FC<LoginProps> = () => {
         setIsAuthenticated(response);
       })
       .catch((error) => {
+        if (error.message) {
+          setError(error.message);
+        }
+        console.log("error:", error);
         if (
           error.response.data.errors[0].message ===
             "E_INVALID_AUTH_UID: User not found" ||

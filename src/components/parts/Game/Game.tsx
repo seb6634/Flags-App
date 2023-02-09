@@ -19,9 +19,9 @@ const Game: FC<GameProps> = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [end, setEnd] = useState(false);
-  const [country, setCountry] = useState<Country>();
+  const [country, setCountry] = useState<Country | null>(null);
   const [countriesData, setCountriesData] = useState<Country[]>([]);
-  const gameDuration = 60;
+  const gameDuration = 6;
   const navigate = useNavigate();
 
   const endOfTime = () => {
@@ -41,7 +41,6 @@ const Game: FC<GameProps> = ({ user }) => {
     const shuffledData = country.sort(() => Math.random() - 0.5);
     const randomCountries = shuffledData.slice(0, 4);
     setCountries(randomCountries);
-    setLoading(false);
     const randomCountry =
       randomCountries[Math.floor(Math.random() * randomCountries.length)];
     setCountry(randomCountry);
@@ -49,9 +48,9 @@ const Game: FC<GameProps> = ({ user }) => {
   };
 
   const handleClick = (event: any, code: string) => {
+    setScore(score + 1);
     setDisabled(true);
     if (code === country?.cca3) {
-      setScore(score + 1);
       event.target.style.backgroundColor = "green";
     } else {
       event.target.style.backgroundColor = "red";
@@ -70,6 +69,7 @@ const Game: FC<GameProps> = ({ user }) => {
       .then((response) => {
         setCountriesData(response.data);
         randomize(response.data);
+        setLoading(false);
       })
       .catch((er) => {
         console.log("error:", er);
@@ -78,7 +78,6 @@ const Game: FC<GameProps> = ({ user }) => {
 
   useEffect(() => {
     if (nextStep > 0) {
-      console.log("nextStep:", nextStep);
       randomize(countriesData);
     }
   }, [countriesData, nextStep]);
@@ -89,7 +88,7 @@ const Game: FC<GameProps> = ({ user }) => {
         <Loader />
       ) : (
         <>
-          {!end ? (
+          {!end && country && countries.length > 0 ? (
             <>
               <div className="flex justify-center mt-6">
                 <Timer initialSeconds={gameDuration} endOfTime={endOfTime} />
@@ -97,28 +96,25 @@ const Game: FC<GameProps> = ({ user }) => {
               <div className="flex flex-col items-center">
                 <h1 className="text-2xl font-bold">Quel est ce pays ?</h1>
                 <>
-                  {country && (
-                    <img
-                      src={country.flags.png}
-                      className="rounded-lg shadow-2xl h-[150px] object-scale-down bg-base-100 my-2 "
-                      alt="country"
-                    />
-                  )}
+                  <img
+                    src={country.flags.png}
+                    className="rounded-lg shadow-2xl h-[150px] object-scale-down bg-base-100 my-2 "
+                    alt="country"
+                  />
                 </>
 
-                {countries &&
-                  countries.map((question: Country) => {
-                    return (
-                      <button
-                        disabled={disabled}
-                        onClick={(e) => handleClick(e, question.cca3)}
-                        key={question.cca3}
-                        className="btn btn-active my-3 min-w-[300px] btn-primary"
-                      >
-                        {question.translations.fra.common}
-                      </button>
-                    );
-                  })}
+                {countries.map((question: Country) => {
+                  return (
+                    <button
+                      disabled={disabled}
+                      onClick={(e) => handleClick(e, question.cca3)}
+                      key={question.cca3}
+                      className="btn btn-active my-3 min-w-[300px] btn-primary"
+                    >
+                      {question.translations.fra.common}
+                    </button>
+                  );
+                })}
               </div>
             </>
           ) : (

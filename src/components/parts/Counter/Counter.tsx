@@ -16,8 +16,6 @@ const Counter: FC<CounterProps> = ({
   label = "Score final",
   numberOfQuestionsGenerated = 0,
 }) => {
-  console.log("value:", value);
-
   const startValue = 0;
   const endValue = value;
   const duration = 100;
