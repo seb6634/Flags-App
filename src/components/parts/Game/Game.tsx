@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { countriesAPIUrl, updateUser } from "../../../services/ApiRequests";
+import { countriesAPIUrl } from "../../../services/ApiRequests";
 import { Country, User } from "../../types";
 import Counter from "../Counter/Counter";
 import Loader from "../Loader/Loader";
@@ -10,9 +10,10 @@ import "./Game.css";
 
 interface GameProps {
   user?: User;
+  updateUserScore: (best_score: number) => void;
 }
 
-const Game: FC<GameProps> = ({ user }) => {
+const Game: FC<GameProps> = ({ user, updateUserScore }) => {
   const [gameState, setGameState] = useState<{
     countries: Country[];
     score: number;
@@ -49,10 +50,6 @@ const Game: FC<GameProps> = ({ user }) => {
 
   function endOfTime() {
     setGameState((prevState) => ({ ...prevState, end: true }));
-    console.log("score:", score);
-    if (user && score > user.best_score) {
-      updateUser({ best_score: score });
-    }
   }
 
   const randomize = (country: Country[]) => {
@@ -65,17 +62,22 @@ const Game: FC<GameProps> = ({ user }) => {
     setGameState((prevState) => ({ ...prevState, disabled: false }));
   };
 
-  function handleClick(event: any, code: string | undefined) {
+  function handleClick(event: any, countryAnswer: Country) {
+    updateUserScore(score);
     setGameState((prevState) => ({ ...prevState, disabled: true }));
-    if (code === country?.cca3) {
+    if (countryAnswer === country) {
       event.target.style.backgroundColor = "green";
+      event.target.style.color = "black";
       setGameState((prevState) => ({
         ...prevState,
         score: prevState.score + 1,
       }));
-      console.log("score:", score);
+      if (user && score > user.best_score) {
+        updateUserScore(score);
+      }
     } else {
       event.target.style.backgroundColor = "red";
+      event.target.style.color = "black";
     }
 
     setTimeout(() => {
@@ -83,7 +85,7 @@ const Game: FC<GameProps> = ({ user }) => {
         ...prevState,
         nextStep: prevState.nextStep + 1,
       }));
-    }, 500);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -95,7 +97,6 @@ const Game: FC<GameProps> = ({ user }) => {
           ...prevState,
           countriesData: response.data,
         }));
-        randomize(response.data);
         setGameState((prevState) => ({ ...prevState, loading: false }));
       })
       .catch((er) => {
@@ -104,9 +105,7 @@ const Game: FC<GameProps> = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    if (nextStep > 0) {
-      randomize(countriesData);
-    }
+    randomize(countriesData);
   }, [countriesData, nextStep]);
 
   return (
@@ -117,7 +116,7 @@ const Game: FC<GameProps> = ({ user }) => {
         <>
           {!end && country && countries.length > 0 ? (
             <>
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center">
                 <Timer initialSeconds={gameDuration} endOfTime={endOfTime} />
               </div>
               <div className="flex flex-col items-center">
@@ -130,11 +129,12 @@ const Game: FC<GameProps> = ({ user }) => {
                   />
                 </>
 
-                {countries.map((question: Country) => {
+                {countries.map((question: Country, index) => {
                   return (
                     <button
+                      id={index.toString()}
                       disabled={disabled}
-                      onClick={(e) => handleClick(e, question.cca3)}
+                      onClick={(e) => handleClick(e, question)}
                       key={question.cca3}
                       className="btn btn-active my-3 min-w-[300px] btn-primary"
                     >
@@ -148,6 +148,13 @@ const Game: FC<GameProps> = ({ user }) => {
             <>
               <div className="flex flex-col items-center gap-6">
                 <h1 className="text-5xl font-bold my-6">Terminé !</h1>
+                {user?.avatar && (
+                  <div className="avatar">
+                    <div className="w-24 rounded-full">
+                      <img src={user?.avatar} alt="avatar img" />
+                    </div>
+                  </div>
+                )}
                 <Counter
                   user={user}
                   value={score}

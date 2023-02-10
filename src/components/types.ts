@@ -6,6 +6,7 @@ export type User = {
   favorites_countries: string;
   best_score: number;
   theme: string;
+  avatar: string;
 };
 
 export type Country = {

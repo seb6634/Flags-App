@@ -5,14 +5,9 @@ import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import FavouritesCountries from "./components/pages/FavouritesCountries/FavouritesCountries";
+import GamePage from "./components/pages/GamePage/GamePage";
 import Login from "./components/pages/Login/Login";
 import NotFound from "./components/pages/NotFound/NotFound";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import { countriesAPIUrl, getUser, updateUser } from "./services/ApiRequests";
-import { hasAuthenticated } from "./services/AuthApi";
-import { Country, User } from "./components/types";
-import { Auth } from "./context/Auth";
-import GamePage from "./components/pages/GamePage/GamePage";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
 import Register from "./components/pages/Register/Register";
 import ResultPage from "./components/pages/ResultPage/ResultPage";
@@ -20,6 +15,11 @@ import Welcome from "./components/pages/Welcome/Welcome";
 import Game from "./components/parts/Game/Game";
 import Layout from "./components/parts/Layout/Layout";
 import Nav from "./components/parts/Nav/Nav";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { Country, User } from "./components/types";
+import { Auth } from "./context/Auth";
+import { countriesAPIUrl, getUser, updateUser } from "./services/ApiRequests";
+import { hasAuthenticated } from "./services/AuthApi";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
@@ -27,6 +27,16 @@ function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
+
+  const updateUserScore = (best_score: number) => {
+    updateUser({ best_score })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((er) => {
+        console.log("error:", er);
+      });
+  };
 
   const addToFarovites = (cca3: string) => {
     if (!user) {
@@ -71,6 +81,16 @@ function App() {
       });
   };
 
+  const updateUserAvatar = (avatar: string) => {
+    updateUser({ avatar })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((er) => {
+        console.log("error:", er);
+      });
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       getUser().then((response) => {
@@ -85,7 +105,7 @@ function App() {
   return (
     <>
       <Auth.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <Nav></Nav>
+        <Nav user={user}></Nav>
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -100,7 +120,11 @@ function App() {
               path="/"
             />
             <Route element={<GamePage user={user} />} path="/game-page" />
-            <Route element={<Game user={user} />} path="/game" />`
+            <Route
+              element={<Game updateUserScore={updateUserScore} user={user} />}
+              path="/game"
+            />
+            `
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/register" />
             <Route
@@ -126,7 +150,15 @@ function App() {
               />
             </Route>
             <Route path="/profile" element={<ProtectedRoute />}>
-              <Route path="/profile" element={<ProfilePage user={user} />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProfilePage
+                    updateUserAvatar={updateUserAvatar}
+                    user={user}
+                  />
+                }
+              />
             </Route>
             <Route element={<NotFound />} path="*" />
           </Routes>

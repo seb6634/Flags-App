@@ -2,11 +2,14 @@ import { FC, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Auth } from "../../../context/Auth";
 import { logout } from "../../../services/AuthApi";
+import { User } from "../../types";
 import "./Nav.css";
 
-interface NavProps {}
+interface NavProps {
+  user?: User;
+}
 
-const Nav: FC<NavProps> = () => {
+const Nav: FC<NavProps> = ({ user }) => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Auth);
   const fullScreen = window.location.pathname === "/game" ? true : false;
 
@@ -83,7 +86,7 @@ const Nav: FC<NavProps> = () => {
                   >
                     <div className="w-10 rounded-full">
                       <img
-                        src="https://placeimg.com/80/80/people"
+                        src={user?.avatar ? user.avatar : "avatar/avatar-0.png"}
                         alt="profile-img"
                       />
                     </div>
