@@ -72,7 +72,7 @@ const Nav: FC<NavProps> = ({ user }) => {
           </div>
           <div className="navbar-center">
             <NavLink to={"/"}>
-              <img width={50} src="world.png" alt="world-logo" />
+              <img width={35} src="world-flags.png" alt="world-logo" />
             </NavLink>
           </div>
 

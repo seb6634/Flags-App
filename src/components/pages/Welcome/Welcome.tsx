@@ -30,11 +30,12 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
 
   return (
     <>
-      <h1 className="text-4xl font-bold py-3">Bienvenue dans countries!</h1>
+      <h1 className="text-4xl font-bold">Bienvenue dans Countries !</h1>
+      <img className="w-1/3" src="world-flags.png" alt="" />
       <section className="py-3">
         <p>
-          Vous pouvez rechercher un pays par son nom, sa capitale, sa langue ou
-          sa monnaie.
+          Recherchez un pays en utilisant son nom, sa capitale, sa langue ou sa
+          monnaie !
         </p>
         <select
           value={selectValue}
@@ -50,7 +51,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
         <input
           onChange={(event) => setInputValue(event.target.value.toLowerCase())}
           type="search"
-          placeholder="Votre recherche"
+          placeholder="Recherche"
           className="input w-full max-w-xs"
         />
         {loading ? (
@@ -58,41 +59,35 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
             onClick={() => onClick(inputValue, selectValue)}
             className="btn loading btn-primary my-6 "
           >
-            Rechercher
+            Rechercher 🔎
           </button>
         ) : (
           <button
             onClick={() => onClick(inputValue, selectValue)}
             className="btn btn-primary my-6 "
           >
-            Rechercher
+            Rechercher 🔎
           </button>
         )}
       </section>
-
       <section className="py-3 flex flex-col gap-5">
-        <p>
-          Vous pouvez aussi lancer une partie pour tester vos connaissances sur
-          les drapeaux.
-        </p>
+        <p>Testez vos connaissances sur les drapeaux en jouant à notre jeu !</p>
         <NavLink to={"/game-page"}>
-          <button className="btn btn-primary">Démarrer</button>
+          <button className="btn btn-primary">Jouer 🌍</button>
         </NavLink>
       </section>
-
       {!isAuthenticated && (
-        <>
-          <section className="py-3 flex flex-col gap-5">
-            <p>
-              En vous connectant vous pourrez accéder à des fonctionnalités
-              supplémentaires comme la sauvegarde de vos scores. le changement
-              de Thème, la sauvegarde de vos pays preféres.
-            </p>
-            <NavLink to={"/login"}>
-              <button className="btn btn-primary">Se connecter</button>
-            </NavLink>
-          </section>
-        </>
+        <section className="py-3 flex flex-col gap-5">
+          <p>
+            Connectez-vous pour accéder à des fonctionnalités supplémentaires :{" "}
+            <br></br>
+            sauvegarde des scores, thèmes personnalisés, avatars personnalisés
+            etc.
+          </p>
+          <NavLink to={"/login"}>
+            <button className="btn btn-primary">Se connecter 👋</button>
+          </NavLink>
+        </section>
       )}
     </>
   );
