@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
     end: boolean;
     country: Country | null;
     countriesData: Country[];
+    usedCountries: Country[];
   }>({
     countries: [],
     score: 0,
@@ -32,6 +34,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
     end: false,
     country: null,
     countriesData: [],
+    usedCountries: [],
   });
 
   const gameDuration = 60;
@@ -46,26 +49,38 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
     end,
     country,
     countriesData,
+    usedCountries,
   } = gameState;
 
-  function endOfTime() {
+  const endOfTime = () => {
     setGameState((prevState) => ({ ...prevState, end: true }));
-  }
-
-  const randomize = (country: Country[]) => {
-    const shuffledData = country.sort(() => Math.random() - 0.5);
-    const randomCountries = shuffledData.slice(0, 4);
-    setGameState((prevState) => ({ ...prevState, countries: randomCountries }));
-    const randomCountry =
-      randomCountries[Math.floor(Math.random() * randomCountries.length)];
-    setGameState((prevState) => ({ ...prevState, country: randomCountry }));
-    setGameState((prevState) => ({ ...prevState, disabled: false }));
   };
 
-  function handleClick(event: any, countryAnswer: Country) {
-    updateUserScore(score);
+  const randomize = (country: Country[]) => {
+    const filteredData = country.filter(
+      (c) => c.translations.fra.common.length < 30
+    );
+    let shuffledData = filteredData.filter((c) => !usedCountries.includes(c));
+    shuffledData = shuffledData.sort(() => Math.random() - 0.5);
+    const randomCountries = shuffledData.slice(0, 4);
+
+    const newGameState = {
+      ...gameState,
+      countries: randomCountries,
+      country:
+        randomCountries[Math.floor(Math.random() * randomCountries.length)],
+      disabled: false,
+      usedCountries: [...usedCountries, ...randomCountries],
+    };
+    setGameState(newGameState);
+  };
+
+  const handleClickAnswer = (event: any, countryAnswer: Country) => {
+    const timeToNextQuestionIfIncorrect = 2000;
+    const timeToNextQuestionIfCorrect = 500;
     setGameState((prevState) => ({ ...prevState, disabled: true }));
-    if (countryAnswer === country) {
+    // good answer
+    if (countryAnswer.cca3 === country?.cca3) {
       event.target.style.backgroundColor = "green";
       event.target.style.color = "black";
       setGameState((prevState) => ({
@@ -75,18 +90,30 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
       if (user && score > user.best_score) {
         updateUserScore(score);
       }
+      setTimeout(() => {
+        setGameState((prevState) => ({
+          ...prevState,
+          nextStep: prevState.nextStep + 1,
+        }));
+      }, timeToNextQuestionIfCorrect);
     } else {
+      // wrong answer
       event.target.style.backgroundColor = "red";
       event.target.style.color = "black";
+      const correctAnswer = document.getElementById(country?.cca3 || "");
+      if (correctAnswer) {
+        correctAnswer.classList.add("blinking");
+        correctAnswer.style.backgroundColor = "green";
+        correctAnswer.style.color = "black";
+      }
+      setTimeout(() => {
+        setGameState((prevState) => ({
+          ...prevState,
+          nextStep: prevState.nextStep + 1,
+        }));
+      }, timeToNextQuestionIfIncorrect);
     }
-
-    setTimeout(() => {
-      setGameState((prevState) => ({
-        ...prevState,
-        nextStep: prevState.nextStep + 1,
-      }));
-    }, 1000);
-  }
+  };
 
   useEffect(() => {
     setGameState((prevState) => ({ ...prevState, disabled: false }));
@@ -121,20 +148,20 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
               </div>
               <div className="flex flex-col items-center">
                 <h1 className="text-2xl font-bold">Quel est ce pays ?</h1>
-                <>
+                <div>
                   <img
                     src={country.flags.png}
-                    className="rounded-lg shadow-2xl h-[150px] object-scale-down bg-base-100 my-2 "
+                    className="rounded-lg shadow-2xl h-[200px] object-cover bg-base-100 my-2 "
                     alt="country"
                   />
-                </>
+                </div>
 
-                {countries.map((question: Country, index) => {
+                {countries.map((question: Country) => {
                   return (
                     <button
-                      id={index.toString()}
+                      id={question.cca3.toString()}
                       disabled={disabled}
-                      onClick={(e) => handleClick(e, question)}
+                      onClick={(e) => handleClickAnswer(e, question)}
                       key={question.cca3}
                       className="btn btn-active my-3 min-w-[300px] btn-primary"
                     >
