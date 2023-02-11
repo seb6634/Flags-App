@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { updateUser } from "../../../services/ApiRequests";
+import { deleteAccount, updateUser } from "../../../services/ApiRequests";
+import { logout } from "../../../services/AuthApi";
 import { themesList } from "../../../services/ThemesList";
 import { User } from "../../types";
 import "./ProfilePage.css";
@@ -11,6 +12,7 @@ interface ProfilePageProps {
 
 const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
   const [theme, setTheme] = useState(user?.theme ?? "dark");
+  const [inputValue, setInputValue] = useState("");
 
   const changeTheme = (event: ChangeEvent<HTMLSelectElement>) => {
     updateUser({ theme: event.target.value }).then((response) => {
@@ -29,6 +31,22 @@ const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
     { url: "avatar/avatar-8.png", label: "Avatar 8" },
   ];
 
+  const deleteAccountSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (user?.email !== inputValue) return;
+    deleteAccount().then((response) => {
+      if (response.status === 200) {
+        logout();
+        window.location.href = "/";
+      }
+    });
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.currentTarget.value);
+    console.log("event:", event.currentTarget.value);
+  };
+
   useEffect(() => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
   }, [theme, user?.avatar]);
@@ -36,7 +54,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
     <>
       {user && (
         <div className="flex flex-col gap-6">
-          <h1 className="text-5xl font-bold ">Preferences</h1>
+          <h1 className="text-5xl font-bold ">Profil</h1>
           <div>
             <div className="avatar">
               <div className="w-24 rounded-full">
@@ -80,6 +98,24 @@ const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
           </div>
         </div>
       )}
+      <p className="mt-10">
+        Pour supprimer votre compte, veuillez entrer votre email:
+      </p>
+      <form className="flex gap-5 ">
+        <input
+          type="email"
+          placeholder="email"
+          className="input input-bordered w-full max-w-xs"
+          onChange={handleChange}
+        />
+        <button
+          disabled={user?.email !== inputValue}
+          onClick={deleteAccountSubmit}
+          className="btn btn-error"
+        >
+          Supprimer mon compte
+        </button>
+      </form>
     </>
   );
 };

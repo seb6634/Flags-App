@@ -24,3 +24,12 @@ export const getUser = async () => {
   });
   return response;
 };
+
+export const deleteAccount = async () => {
+  const response = axios.delete(`${APIUrl}/user`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.jwt}`,
+    },
+  });
+  return response;
+};
