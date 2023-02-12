@@ -52,6 +52,7 @@ function App() {
       favoritesCountries = [...favoritesCountries, cca3];
     }
     favoritesCountries = JSON.stringify(favoritesCountries);
+    console.log("favoritesCountries:", favoritesCountries);
 
     updateUser({ favorites_countries: favoritesCountries })
       .then((response) => {

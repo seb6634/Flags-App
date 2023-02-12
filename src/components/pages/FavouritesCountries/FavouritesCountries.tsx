@@ -30,6 +30,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       })
       .catch((er) => {
         console.log("error:", er);
+        setCountries([]);
       });
   };
 

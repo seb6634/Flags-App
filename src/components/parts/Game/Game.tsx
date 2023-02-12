@@ -37,7 +37,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
     usedCountries: [],
   });
 
-  const gameDuration = 60;
+  const gameDuration = 15;
   const navigate = useNavigate();
 
   const {
@@ -79,6 +79,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
     const timeToNextQuestionIfIncorrect = 2000;
     const timeToNextQuestionIfCorrect = 500;
     setGameState((prevState) => ({ ...prevState, disabled: true }));
+
     // good answer
     if (countryAnswer.cca3 === country?.cca3) {
       event.target.style.backgroundColor = "green";
@@ -87,7 +88,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
         ...prevState,
         score: prevState.score + 1,
       }));
-      if (user && score > user.best_score) {
+      if (user && score > Number(user.best_score)) {
         updateUserScore(score);
       }
       setTimeout(() => {
@@ -132,6 +133,8 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
   }, []);
 
   useEffect(() => {
+    if (nextStep === 0)
+      setGameState((prevState) => ({ ...prevState, score: 1 }));
     randomize(countriesData);
   }, [countriesData, nextStep]);
 

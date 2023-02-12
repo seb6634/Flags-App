@@ -12,7 +12,7 @@ interface CounterProps {
 
 const Counter: FC<CounterProps> = ({
   user,
-  value = 0,
+  value,
   label = "Score final",
   numberOfQuestionsGenerated = 0,
 }) => {
