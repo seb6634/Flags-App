@@ -12,19 +12,25 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
   const [partialUsers, setPartialUsers] = useState<Partial<User>[]>([]);
 
   useEffect(() => {
-    usersBestScores().then((partialUser) => {
-      setPartialUsers(partialUser.data);
-    });
+    usersBestScores()
+      .then((partialUser) => {
+        console.log("partialUser:", partialUser);
+        setPartialUsers(partialUser.data);
+      })
+      .catch((er) => {
+        console.log("error:", er);
+      });
   }, []);
 
   return (
     <>
+      <h1 className="text-5xl font-bold ">Classement</h1>
       {partialUsers.length > 0 ? (
         <div className="">
-          <table className="table w-1/2">
+          <table className="table">
             <thead>
               <tr>
-                <th>Classement</th>
+                <th></th>
                 <th>Pseudo</th>
                 <th>Meilleur score</th>
               </tr>
@@ -38,7 +44,20 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
                   key={index}
                 >
                   <td>{index + 1}</td>
-                  <td>{partialUser.username}</td>
+                  <td className="flex items-center gap-2">
+                    <div className="w-8 rounded-full">
+                      <img
+                        src={user?.avatar ? user.avatar : "avatar/avatar-0.png"}
+                        alt="profile-img"
+                      />
+                    </div>
+                    <p>
+                      {" "}
+                      {partialUser.username.length < 10
+                        ? partialUser.username
+                        : partialUser.username.slice(0, 10) + "..."}
+                    </p>
+                  </td>
                   <td className="text-center">{partialUser.best_score}</td>
                 </tr>
               ))}

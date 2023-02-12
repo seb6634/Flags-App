@@ -83,7 +83,7 @@ const ProfilePage: FC<ProfilePageProps> = ({
           </div>
           <p>Email: {user.email}</p>
           <p>Pseudo: {user.username}</p>
-          {user.best_score > 0 && <p>Meilleur score: {user.username}</p>}
+          {user.best_score > 0 && <p>Meilleur score: {user.best_score}</p>}
           <div>
             Theme:
             <select
