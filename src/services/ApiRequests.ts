@@ -33,3 +33,12 @@ export const deleteAccount = async () => {
   });
   return response;
 };
+
+export const usersBestScores = async () => {
+  const response = axios.get(`${APIUrl}/users/best-score`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.jwt}`,
+    },
+  });
+  return response;
+};

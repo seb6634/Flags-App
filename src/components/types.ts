@@ -7,6 +7,7 @@ export type User = {
   best_score: number;
   theme: string;
   avatar: string;
+  score_sharing: "true" | "false";
 };
 
 export type Country = {

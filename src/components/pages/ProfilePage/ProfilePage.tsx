@@ -8,11 +8,17 @@ import "./ProfilePage.css";
 interface ProfilePageProps {
   user?: User;
   updateUserAvatar: (avatar: string) => void;
+  updateUserBestScoreSharing: (best_score_sharing: "true" | "false") => void;
 }
 
-const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
+const ProfilePage: FC<ProfilePageProps> = ({
+  user,
+  updateUserAvatar,
+  updateUserBestScoreSharing,
+}) => {
   const [theme, setTheme] = useState(user?.theme ?? "dark");
   const [inputValue, setInputValue] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const changeTheme = (event: ChangeEvent<HTMLSelectElement>) => {
     updateUser({ theme: event.target.value }).then((response) => {
@@ -44,12 +50,22 @@ const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
-    console.log("event:", event.currentTarget.value);
+  };
+
+  const handleToogleChange = (event: boolean) => {
+    if (event === true) {
+      setChecked(true);
+      updateUserBestScoreSharing("true");
+    } else {
+      setChecked(false);
+      updateUserBestScoreSharing("false");
+    }
   };
 
   useEffect(() => {
+    setChecked(user?.score_sharing === "true" ? true : false);
     document.querySelector("html")?.setAttribute("data-theme", theme);
-  }, [theme, user?.avatar]);
+  }, [theme, user?.score_sharing]);
   return (
     <>
       {user && (
@@ -95,6 +111,17 @@ const ProfilePage: FC<ProfilePageProps> = ({ user, updateUserAvatar }) => {
                 </option>
               ))}
             </select>
+          </div>
+          <div>
+            <p>Apparaitre dans le classement:</p>
+            <input
+              checked={checked}
+              onChange={(event) => {
+                handleToogleChange(event.target.checked);
+              }}
+              type="checkbox"
+              className="toggle toggle-primary ml-2 mt-1 "
+            />
           </div>
         </div>
       )}

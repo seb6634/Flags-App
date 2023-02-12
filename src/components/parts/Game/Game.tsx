@@ -151,7 +151,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
                 <div>
                   <img
                     src={country.flags.png}
-                    className="rounded-lg shadow-2xl h-[200px] object-cover bg-base-100 my-2 "
+                    className="rounded-lg shadow-2xl h-[150px] object-cover bg-base-100 my-2 "
                     alt="country"
                   />
                 </div>
@@ -170,6 +170,12 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
                   );
                 })}
               </div>
+              {/* <button
+                className="btn btn-primary max-w-fit"
+                onClick={() => navigate("/game-page")}
+              >
+                Quitter
+              </button> */}
             </>
           ) : (
             <>

@@ -9,6 +9,7 @@ import GamePage from "./components/pages/GamePage/GamePage";
 import Login from "./components/pages/Login/Login";
 import NotFound from "./components/pages/NotFound/NotFound";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
+import RankingPage from "./components/pages/RankingPage/RankingPage";
 import Register from "./components/pages/Register/Register";
 import ResultPage from "./components/pages/ResultPage/ResultPage";
 import Welcome from "./components/pages/Welcome/Welcome";
@@ -91,6 +92,16 @@ function App() {
       });
   };
 
+  const updateUserBestScoreSharing = (score_sharing: "true" | "false") => {
+    updateUser({ score_sharing })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((er) => {
+        console.log("error:", er);
+      });
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       getUser().then((response) => {
@@ -149,12 +160,16 @@ function App() {
                 }
               />
             </Route>
+            <Route path="/ranking" element={<ProtectedRoute />}>
+              <Route path="/ranking" element={<RankingPage user={user} />} />
+            </Route>
             <Route path="/profile" element={<ProtectedRoute />}>
               <Route
                 path="/profile"
                 element={
                   <ProfilePage
                     updateUserAvatar={updateUserAvatar}
+                    updateUserBestScoreSharing={updateUserBestScoreSharing}
                     user={user}
                   />
                 }

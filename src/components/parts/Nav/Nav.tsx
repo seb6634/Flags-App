@@ -55,6 +55,9 @@ const Nav: FC<NavProps> = ({ user }) => {
                     <li>
                       <NavLink to={"/favorites"}>Favoris</NavLink>
                     </li>
+                    <li>
+                      <NavLink to={"/ranking"}>Classement</NavLink>
+                    </li>
                   </>
                 )}
                 {!isAuthenticated && (
@@ -97,6 +100,8 @@ const Nav: FC<NavProps> = ({ user }) => {
                   >
                     <li>
                       <NavLink to={"/profile"}>Profil</NavLink>
+                    </li>
+                    <li>
                       <NavLink onClick={handleLogout} to={"/"}>
                         Se déconnecter
                       </NavLink>
