@@ -33,8 +33,12 @@ const Counter: FC<CounterProps> = ({
     return () => clearInterval(timer);
   }, [value]);
 
-  const fixValue = (val: number) =>
-    Number.isNaN(val) || val === 0 ? undefined : parseFloat(val.toFixed(0));
+  const fixValue = (val: number) => {
+    const value = Number(val);
+    return Number.isNaN(value) || value === 0
+      ? undefined
+      : parseFloat(value.toFixed(0));
+  };
 
   const percentage = fixValue(
     (currentValue / numberOfQuestionsGenerated) * 100

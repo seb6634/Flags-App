@@ -80,3 +80,21 @@ export type Flags = {
   svg: string;
   png: string;
 };
+
+//
+export type GameOptions = {
+  id: string;
+  score: number;
+  duration: number;
+};
+
+export type GameStep = {
+  id: string;
+  question: string;
+  answers: Answer[];
+};
+
+export type Answer = {
+  name: string;
+  cca3: string;
+};

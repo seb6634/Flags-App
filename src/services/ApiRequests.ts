@@ -42,3 +42,33 @@ export const usersBestScores = async () => {
   });
   return response;
 };
+
+export const startGame = async () => {
+  const response = axios.get(`${APIUrl}/game/start`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.jwt}`,
+    },
+  });
+  return response;
+};
+
+export const getQuestions = async (gameId: string) => {
+  const response = axios.get(`${APIUrl}/game/question/${gameId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.jwt}`,
+    },
+  });
+  return response;
+};
+
+export const checkAnswer = async (questionId: string, answer: string) => {
+  const response = axios.get(
+    `${APIUrl}/game/check-answer/${questionId}/${answer}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.jwt}`,
+      },
+    }
+  );
+  return response;
+};
