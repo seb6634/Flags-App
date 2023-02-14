@@ -47,11 +47,11 @@ const Nav: FC<NavProps> = ({ user }) => {
                 <li>
                   <NavLink to={"/"}>Accueil</NavLink>
                 </li>
-                <li>
-                  <NavLink to={"/game-page"}>Jouer</NavLink>
-                </li>
                 {isAuthenticated && (
                   <>
+                    <li>
+                      <NavLink to={"/game-page"}>Jouer</NavLink>
+                    </li>
                     <li>
                       <NavLink to={"/favorites"}>Favoris</NavLink>
                     </li>

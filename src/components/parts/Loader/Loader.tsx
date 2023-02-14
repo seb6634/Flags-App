@@ -1,11 +1,17 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import "./Loader.css";
 
 interface LoaderProps {}
 
 const Loader: FC<LoaderProps> = () => (
-  <div className="flex justify-center ">
-    <progress className="progress w-56 mt-10"></progress>
+  <div className="flex justify-center items-center h-full">
+    <div className="w-24 h-24 relative">
+      <img
+        src="world-flags.png"
+        alt="loader"
+        className="w-full h-full animate-spin"
+      />
+    </div>
   </div>
 );
 

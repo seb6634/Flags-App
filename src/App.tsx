@@ -29,16 +29,6 @@ function App() {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
-  const updateUserScore = (best_score: number) => {
-    updateUser({ best_score })
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((er) => {
-        console.log("error:", er);
-      });
-  };
-
   const addToFarovites = (cca3: string) => {
     if (!user) {
       return;
@@ -131,12 +121,6 @@ function App() {
               element={<Welcome loading={loading} onClick={onClick} />}
               path="/"
             />
-            <Route element={<GamePage user={user} />} path="/game-page" />
-            <Route
-              element={<Game updateUserScore={updateUserScore} user={user} />}
-              path="/game"
-            />
-            `
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/register" />
             <Route
@@ -150,6 +134,12 @@ function App() {
               path="/countries"
             />
             {/* ProtectedRoute */}
+            <Route path="/game-page" element={<ProtectedRoute />}>
+              <Route path="/game-page" element={<GamePage user={user} />} />
+            </Route>
+            <Route path="/game" element={<ProtectedRoute />}>
+              <Route path="/game" element={<Game user={user} />} />
+            </Route>
             <Route path="/favorites" element={<ProtectedRoute />}>
               <Route
                 path="/favorites"

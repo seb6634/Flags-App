@@ -24,7 +24,7 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
 
   return (
     <>
-      <h1 className="text-5xl font-bold ">Classement</h1>
+      <h1 className="text-4xl font-bold ">Classement</h1>
       {partialUsers.length > 0 ? (
         <div className="">
           <table className="table">
@@ -47,7 +47,11 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
                   <td className="flex items-center gap-2">
                     <div className="w-8 rounded-full">
                       <img
-                        src={user?.avatar ? user.avatar : "avatar/avatar-0.png"}
+                        src={
+                          partialUser?.avatar
+                            ? partialUser.avatar
+                            : "avatar/avatar-0.png"
+                        }
                         alt="profile-img"
                       />
                     </div>

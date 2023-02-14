@@ -70,7 +70,7 @@ const ProfilePage: FC<ProfilePageProps> = ({
     <>
       {user && (
         <div className="flex flex-col gap-6">
-          <h1 className="text-5xl font-bold ">Profil</h1>
+          <h1 className="text-4xl font-bold ">Profil</h1>
           <div>
             <div className="avatar">
               <div className="w-24 rounded-full">

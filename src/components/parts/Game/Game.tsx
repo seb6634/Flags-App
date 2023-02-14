@@ -13,10 +13,9 @@ import "./Game.css";
 
 interface GameProps {
   user?: User;
-  updateUserScore: (best_score: number) => void;
 }
 
-const Game: FC<GameProps> = ({ user, updateUserScore }) => {
+const Game: FC<GameProps> = ({ user }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [gameOptions, setGameOptions] = useState<GameOptions>(
@@ -64,9 +63,8 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
         setQuestion(gameStep.data.question);
         setDisabled(false);
         setAnswers(gameStep.data.answers);
+        setLoading(false);
       });
-
-      setLoading(false);
     });
   }, []);
 
@@ -123,7 +121,7 @@ const Game: FC<GameProps> = ({ user, updateUserScore }) => {
             ) : (
               <>
                 <div className="flex flex-col items-center gap-6">
-                  <h1 className="text-5xl font-bold my-6">Terminé !</h1>
+                  <h1 className="text-4xl font-bold my-6">Terminé !</h1>
                   {user?.avatar && (
                     <div className="avatar">
                       <div className="w-24 rounded-full">

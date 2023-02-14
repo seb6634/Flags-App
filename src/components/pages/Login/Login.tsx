@@ -50,11 +50,12 @@ const Login: FC<LoginProps> = () => {
     <>
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Me connecter!</h1>
+          <h1 className="text-4xl font-bold">Me connecter!</h1>
           <p className="py-6">
-            En me connectant je peux accéder à des fonctionnalités
-            supplémentaires comme la sauvegarde de vos scores. le changement de
-            Thème, la sauvegarde de vos pays préférés.
+            En me connectant,<br></br> j'accède à des fonctionnalités
+            supplémentaires, notamment le jeu, la sauvegarde de mes scores, la
+            sauvegarde de mes cartes pays préférées, le changement de thème et
+            le classement du jeu.
           </p>
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
