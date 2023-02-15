@@ -7,9 +7,10 @@ import "./Welcome.css";
 interface WelcomeProps {
   onClick: (inputValue: string, selectValue: string) => void;
   loading: boolean;
+  error: boolean;
 }
 
-const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
+const Welcome: FC<WelcomeProps> = ({ onClick, loading, error }) => {
   const { isAuthenticated } = useContext(Auth);
   const [inputValue, setInputValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("name");
@@ -32,7 +33,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
       <figure className="flex justify-center">
         <img className="w-1/3 my-3" src="world-flags.png" alt="" />
       </figure>
-      <section>
+      <form onSubmit={(e) => e.preventDefault()}>
         <p className="mb-2">
           Recherchez un pays par nom, capitale, langue ou monnaie !
         </p>
@@ -53,6 +54,11 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
           placeholder="Recherche"
           className="input w-full max-w-xs"
         />
+        {error && (
+          <p className="text-sm text-red-500 mt-1">
+            Vous devez saisir au moins 1 caractère
+          </p>
+        )}
         {loading ? (
           <button
             onClick={() => onClick(inputValue, selectValue)}
@@ -68,7 +74,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
             Rechercher <span className="text-xl ml-2">🔎</span>
           </button>
         )}
-      </section>
+      </form>
       {isAuthenticated && (
         <section className="flex flex-col gap-5">
           <p>Jouez à notre jeu de drapeaux pour tester vos connaissances !</p>

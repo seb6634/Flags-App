@@ -45,7 +45,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
   }, [user]);
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       {loading ? (
         <Loader />
       ) : (
@@ -64,7 +64,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
           )}
         </>
       )}
-    </>
+    </div>
   );
 };
 

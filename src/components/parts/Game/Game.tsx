@@ -107,7 +107,7 @@ const Game: FC<GameProps> = () => {
           <>
             {!endGame ? (
               <>
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-2">
                   <Timer
                     initialSeconds={gameOptions.duration}
                     endOfTime={endOfTime}

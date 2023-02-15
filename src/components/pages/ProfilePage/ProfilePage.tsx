@@ -81,9 +81,18 @@ const ProfilePage: FC<ProfilePageProps> = ({
               </div>
             </div>
           </div>
-          <p>Email: {user.email}</p>
-          <p>Pseudo: {user.username}</p>
-          {user.best_score > 0 && <p>Meilleur score: {user.best_score}</p>}
+          <div className="card w-full bg-primary text-primary-content ">
+            <div className="card-body">
+              <p>Email: {user.email}</p>
+              <p>Pseudo: {user.username}</p>
+              <div className="card-actions justify-end">
+                {user.best_score > 0 && (
+                  <p>Meilleur score: {user.best_score}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div>
             Theme:
             <select
@@ -125,10 +134,10 @@ const ProfilePage: FC<ProfilePageProps> = ({
           </div>
         </div>
       )}
-      <p className="mt-10">
+      <p className="mt-10 mb-2">
         Pour supprimer votre compte, veuillez entrer votre email:
       </p>
-      <form className="flex gap-5 ">
+      <form className="flex gap-3 ">
         <input
           type="email"
           placeholder="email"

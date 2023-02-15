@@ -26,7 +26,7 @@ const ResultPage: FC<ResultPageProps> = ({
     }
   }, [countries.length]);
   return (
-    <>
+    <div className="flex flex-col flex-wrap gap-6">
       {loading ? (
         <Loader />
       ) : (
@@ -45,7 +45,7 @@ const ResultPage: FC<ResultPageProps> = ({
           )}
         </>
       )}
-    </>
+    </div>
   );
 };
 
