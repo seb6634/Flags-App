@@ -31,12 +31,24 @@ const GamePage: FC<GamePageProps> = ({ user }) => (
         )}
       </div>
     </div>
-    <p className="py-2">
-      Vous pouvez lancer la partie en appuyant sur démarrer.
-    </p>
-    <NavLink to={"/game"}>
-      <button className="btn btn-primary">Démarrer</button>
-    </NavLink>
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="py-2">Lancer l'entrainement.</p>
+        <NavLink to={"/training"}>
+          <button className="btn btn-primary">
+            Démarrer <span className="text-xl ml-2">🏋️</span>
+          </button>
+        </NavLink>
+      </div>
+      <div>
+        <p className="py-2">Lancer la partie.</p>
+        <NavLink to={"/game"}>
+          <button className="btn btn-primary">
+            Démarrer <span className="text-xl ml-2">🌍</span>
+          </button>
+        </NavLink>
+      </div>
+    </div>
   </>
 );
 

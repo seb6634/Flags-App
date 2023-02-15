@@ -51,7 +51,7 @@ const Counter: FC<CounterProps> = ({
         <div className="stat-title">{label}</div>
         <div className="stat-value">
           {fixValue(currentValue) ?? 0}
-          {numberOfQuestionsGenerated ? ` / ${numberOfQuestionsGenerated}` : 0}
+          {numberOfQuestionsGenerated ? ` / ${numberOfQuestionsGenerated}` : ""}
         </div>
       </div>
 

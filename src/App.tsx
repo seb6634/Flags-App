@@ -16,6 +16,7 @@ import Welcome from "./components/pages/Welcome/Welcome";
 import Game from "./components/parts/Game/Game";
 import Layout from "./components/parts/Layout/Layout";
 import Nav from "./components/parts/Nav/Nav";
+import Training from "./components/parts/Training/Training";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { Country, User } from "./components/types";
 import { Auth } from "./context/Auth";
@@ -135,6 +136,9 @@ function App() {
             {/* ProtectedRoute */}
             <Route path="/game-page" element={<ProtectedRoute />}>
               <Route path="/game-page" element={<GamePage user={user} />} />
+            </Route>
+            <Route path="/training" element={<ProtectedRoute />}>
+              <Route path="/training" element={<Training />} />
             </Route>
             <Route path="/game" element={<ProtectedRoute />}>
               <Route path="/game" element={<Game />} />

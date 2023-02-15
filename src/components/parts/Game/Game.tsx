@@ -17,7 +17,8 @@ interface GameProps {}
 
 const Game: FC<GameProps> = () => {
   const DEBOUNCE_DELAY = 500;
-  const PENALTY_DURATION = 5;
+  const PENALTY_DURATION = 5000;
+  const TIME_TO_NEXT_QUESTION = 700;
 
   const navigate = useNavigate();
   const [user, setUser] = useState<User>({} as User);
@@ -39,8 +40,10 @@ const Game: FC<GameProps> = () => {
     if (!debounced && !penalized) {
       setDebounced(true);
       checkAnswer(questionId, answer.cca3).then((res) => {
-        setNextStep(nextStep + 1);
-        setScore(res.data.score);
+        setTimeout(() => {
+          setNextStep(nextStep + 1);
+          setScore(res.data.score);
+        }, TIME_TO_NEXT_QUESTION);
         setTimeout(() => {
           setDebounced(false);
         }, DEBOUNCE_DELAY);
@@ -55,7 +58,7 @@ const Game: FC<GameProps> = () => {
       setTimeout(() => {
         setPenalized(false);
         setDisabled(false);
-      }, PENALTY_DURATION * 1000);
+      }, PENALTY_DURATION);
     }
   };
 
@@ -80,11 +83,18 @@ const Game: FC<GameProps> = () => {
 
   useEffect(() => {
     if (nextStep === 0) return;
-    getQuestions(gameOptions.id).then((gameStep) => {
-      setQuestionId(gameStep.data.id);
-      setQuestion(gameStep.data.question);
-      setAnswers(gameStep.data.answers);
-    });
+    getQuestions(gameOptions.id)
+      .then((gameStep) => {
+        setQuestionId(gameStep.data.id);
+        setQuestion(gameStep.data.question);
+        setAnswers(gameStep.data.answers);
+      })
+      .catch(() => {
+        setEndGame(true);
+        getUser().then((res) => {
+          setUser(res.data);
+        });
+      });
   }, [gameOptions.id, nextStep]);
 
   return (
@@ -103,11 +113,13 @@ const Game: FC<GameProps> = () => {
                   />
                 </div>
                 <div className="flex flex-col items-center">
-                  <h1 className="text-2xl font-bold">Quel est ce pays ?</h1>
+                  <h1 className="text-2xl font-bold">
+                    À quel pays appartient ce drapeau ?
+                  </h1>
                   <div>
                     <img
                       src={question}
-                      className="rounded-lg shadow-2xl h-[150px] object-cover bg-base-100 my-2 "
+                      className="rounded-lg shadow-2xl h-[150px] object-cover bg-base-100 my-4 "
                       alt="country"
                     />
                   </div>
@@ -120,7 +132,7 @@ const Game: FC<GameProps> = () => {
                         onClick={(e) => handleClickAnswer(e, answer)}
                         key={answer.cca3}
                         className={
-                          "btn btn-active my-3 min-w-[300px] btn-primary"
+                          "btn btn-outline my-3 min-w-[300px] btn-primary "
                         }
                       >
                         {answer.name}
