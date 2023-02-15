@@ -58,14 +58,14 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
             onClick={() => onClick(inputValue, selectValue)}
             className="btn loading btn-primary my-6 "
           >
-            Rechercher 🔎
+            Rechercher <span className="text-xl ml-2">🔎</span>
           </button>
         ) : (
           <button
             onClick={() => onClick(inputValue, selectValue)}
             className="btn btn-primary my-6 "
           >
-            Rechercher 🔎
+            Rechercher <span className="text-xl ml-2">🔎</span>
           </button>
         )}
       </section>
@@ -73,7 +73,9 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
         <section className="flex flex-col gap-5">
           <p>Jouez à notre jeu de drapeaux pour tester vos connaissances !</p>
           <NavLink to={"/game-page"}>
-            <button className="btn btn-primary">Jouer 🌍</button>
+            <button className="btn btn-primary">
+              Jouer <span className="text-xl ml-2">🌍</span>
+            </button>
           </NavLink>
         </section>
       )}

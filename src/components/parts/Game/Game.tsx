@@ -37,6 +37,7 @@ const Game: FC<GameProps> = () => {
   const [penalized, setPenalized] = useState(false);
 
   const handleClickAnswer = (event: any, answer: Answer) => {
+    event.target.style.backgroundColor = "blue";
     if (!debounced && !penalized) {
       setDebounced(true);
       checkAnswer(questionId, answer.cca3).then((res) => {
@@ -132,7 +133,7 @@ const Game: FC<GameProps> = () => {
                         onClick={(e) => handleClickAnswer(e, answer)}
                         key={answer.cca3}
                         className={
-                          "btn btn-outline my-3 min-w-[300px] btn-primary "
+                          "btn btn-active my-3 min-w-[300px] btn-primary "
                         }
                       >
                         {answer.name}

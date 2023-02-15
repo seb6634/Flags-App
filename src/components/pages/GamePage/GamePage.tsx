@@ -8,8 +8,8 @@ interface GamePageProps {
 }
 
 const GamePage: FC<GamePageProps> = ({ user }) => (
-  <>
-    <h1 className="text-3xl font-bold">Jouer avec les drapeaux</h1>
+  <div className="flex flex-col gap-6">
+    <h1 className="text-3xl font-bold my-2">Jouer avec les drapeaux</h1>
     <div>
       {user?.avatar && (
         <div className="avatar">
@@ -18,10 +18,10 @@ const GamePage: FC<GamePageProps> = ({ user }) => (
           </div>
         </div>
       )}
-      <div className="my-2">
+      <div>
         {user && user.best_score > 0 && (
           <>
-            <div className="stats shadow">
+            <div className="stats shadow my-2">
               <div className="stat">
                 <div className="stat-title">Votre meilleur score</div>
                 <div className="stat-value">{user.best_score}</div>
@@ -49,7 +49,7 @@ const GamePage: FC<GamePageProps> = ({ user }) => (
         </NavLink>
       </div>
     </div>
-  </>
+  </div>
 );
 
 export default GamePage;
