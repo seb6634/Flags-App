@@ -14,8 +14,11 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
   useEffect(() => {
     usersBestScores()
       .then((partialUser) => {
-        console.log("partialUser:", partialUser);
-        setPartialUsers(partialUser.data);
+        // reorder the array by best score
+        const partialUserSorted = partialUser.data.sort((a: any, b: any) => {
+          return b.best_score - a.best_score;
+        });
+        setPartialUsers(partialUserSorted);
       })
       .catch((er) => {
         console.log("error:", er);

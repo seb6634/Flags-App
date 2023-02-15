@@ -1,8 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   checkAnswer,
   getQuestions,
+  getUser,
   startGame,
 } from "../../../services/ApiRequests";
 import { Answer, GameOptions, GameStep, User } from "../../types";
@@ -11,12 +13,14 @@ import Loader from "../Loader/Loader";
 import Timer from "../Timer/Timer";
 import "./Game.css";
 
-interface GameProps {
-  user?: User;
-}
+interface GameProps {}
 
-const Game: FC<GameProps> = ({ user }) => {
+const Game: FC<GameProps> = () => {
+  const DEBOUNCE_DELAY = 500;
+  const PENALTY_DURATION = 5;
+
   const navigate = useNavigate();
+  const [user, setUser] = useState<User>({} as User);
   const [loading, setLoading] = useState(true);
   const [gameOptions, setGameOptions] = useState<GameOptions>(
     {} as GameOptions
@@ -27,31 +31,38 @@ const Game: FC<GameProps> = ({ user }) => {
   const [nextStep, setNextStep] = useState(0);
   const [endGame, setEndGame] = useState(false);
   const [score, setScore] = useState(0);
+  const [debounced, setDebounced] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [penalized, setPenalized] = useState(false);
 
   const handleClickAnswer = (event: any, answer: Answer) => {
-    checkAnswer(questionId, answer.cca3).then((res) => {
-      if (res.data.correct) {
+    if (!debounced && !penalized) {
+      setDebounced(true);
+      checkAnswer(questionId, answer.cca3).then((res) => {
+        setNextStep(nextStep + 1);
         setScore(res.data.score);
-        event.target.style.backgroundColor = "green";
-        event.target.style.color = "black";
-      } else {
-        event.target.style.backgroundColor = "red";
-        event.target.style.color = "black";
-        const correctAnswer = document.getElementById(res.data.correctAnswer);
-        if (correctAnswer) {
-          correctAnswer.classList.add("blinking");
-          correctAnswer.style.backgroundColor = "green";
-          correctAnswer.style.color = "black";
-        }
-      }
-      setDisabled(true);
-      setTimeout(
-        () => {
-          setNextStep(nextStep + 1);
-        },
-        res.data.correct ? 1000 : 2000
+        setTimeout(() => {
+          setDebounced(false);
+        }, DEBOUNCE_DELAY);
+      });
+    } else if (debounced && !penalized) {
+      toast.info(
+        `Hey! Tu es sur de bien jouer le jeu? 
+         Pénalité de ${PENALTY_DURATION} secondes `
       );
+      setDisabled(true);
+      setPenalized(true);
+      setTimeout(() => {
+        setPenalized(false);
+        setDisabled(false);
+      }, PENALTY_DURATION * 1000);
+    }
+  };
+
+  const endOfTime = () => {
+    setEndGame(true);
+    getUser().then((res) => {
+      setUser(res.data);
     });
   };
 
@@ -61,7 +72,6 @@ const Game: FC<GameProps> = ({ user }) => {
       getQuestions(game.data.id).then((gameStep) => {
         setQuestionId(gameStep.data.id);
         setQuestion(gameStep.data.question);
-        setDisabled(false);
         setAnswers(gameStep.data.answers);
         setLoading(false);
       });
@@ -73,7 +83,6 @@ const Game: FC<GameProps> = ({ user }) => {
     getQuestions(gameOptions.id).then((gameStep) => {
       setQuestionId(gameStep.data.id);
       setQuestion(gameStep.data.question);
-      setDisabled(false);
       setAnswers(gameStep.data.answers);
     });
   }, [gameOptions.id, nextStep]);
@@ -90,7 +99,7 @@ const Game: FC<GameProps> = ({ user }) => {
                 <div className="flex justify-center">
                   <Timer
                     initialSeconds={gameOptions.duration}
-                    endOfTime={() => setEndGame(true)}
+                    endOfTime={endOfTime}
                   />
                 </div>
                 <div className="flex flex-col items-center">
@@ -110,7 +119,9 @@ const Game: FC<GameProps> = ({ user }) => {
                         disabled={disabled}
                         onClick={(e) => handleClickAnswer(e, answer)}
                         key={answer.cca3}
-                        className="btn btn-active my-3 min-w-[300px] btn-primary"
+                        className={
+                          "btn btn-active my-3 min-w-[300px] btn-primary"
+                        }
                       >
                         {answer.name}
                       </button>

@@ -42,7 +42,6 @@ function App() {
       favoritesCountries = [...favoritesCountries, cca3];
     }
     favoritesCountries = JSON.stringify(favoritesCountries);
-    console.log("favoritesCountries:", favoritesCountries);
 
     updateUser({ favorites_countries: favoritesCountries })
       .then((response) => {
@@ -138,7 +137,7 @@ function App() {
               <Route path="/game-page" element={<GamePage user={user} />} />
             </Route>
             <Route path="/game" element={<ProtectedRoute />}>
-              <Route path="/game" element={<Game user={user} />} />
+              <Route path="/game" element={<Game />} />
             </Route>
             <Route path="/favorites" element={<ProtectedRoute />}>
               <Route

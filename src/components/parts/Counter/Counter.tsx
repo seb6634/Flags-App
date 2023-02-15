@@ -50,16 +50,16 @@ const Counter: FC<CounterProps> = ({
       <div className="stat">
         <div className="stat-title">{label}</div>
         <div className="stat-value">
-          {fixValue(currentValue)}
+          {fixValue(currentValue) ?? 0}
           {numberOfQuestionsGenerated ? ` / ${numberOfQuestionsGenerated}` : 0}
         </div>
       </div>
 
-      {numberOfQuestionsGenerated > 0 && (
+      {numberOfQuestionsGenerated > 0 && percentage && (
         <div className="stat">
           <div className="">
             <div className="radial-progress" style={radialProgressStyle}>
-              {`${percentage}%`}
+              {`${percentage ?? 0}%`}
             </div>
           </div>
         </div>
