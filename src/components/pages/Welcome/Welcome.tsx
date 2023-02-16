@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useContext, useState } from "react";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Auth } from "../../../context/Auth";
@@ -7,13 +7,14 @@ import "./Welcome.css";
 interface WelcomeProps {
   onClick: (inputValue: string, selectValue: string) => void;
   loading: boolean;
-  error: boolean;
 }
 
-const Welcome: FC<WelcomeProps> = ({ onClick, loading, error }) => {
+const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
   const { isAuthenticated } = useContext(Auth);
   const [inputValue, setInputValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("name");
+  const [isTouched, setIsTouched] = useState(false);
+  const [error, setError] = useState(false);
   const selectActionList = [
     { name: "name", label: "Nom" },
     { name: "capital", label: "Capitale" },
@@ -22,10 +23,27 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading, error }) => {
   ];
 
   const selectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    localStorage.setItem("selectValue", event.target.value);
     if (event.target.value === "lang")
       toast("Recherche en anglais uniquement pour la langue.");
     setSelectValue(event.target.value);
   };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value.toLowerCase());
+    if (event.target.value.length === 0 && isTouched) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  };
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem("selectValue");
+    if (storedValue) {
+      setSelectValue(storedValue);
+    }
+  }, []);
 
   return (
     <div className="h-full">
@@ -49,31 +67,28 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading, error }) => {
           ))}
         </select>
         <input
-          onChange={(event) => setInputValue(event.target.value.toLowerCase())}
+          onChange={handleChange}
+          onFocus={() => setIsTouched(true)}
+          onBlur={() => {
+            setIsTouched(false);
+            setError(false);
+          }}
           type="search"
           placeholder="Recherche"
           className="input w-full max-w-xs"
         />
-        {error && (
+        {error && isTouched && (
           <p className="text-sm text-red-500 mt-1">
             Vous devez saisir au moins 1 caractère
           </p>
         )}
-        {loading ? (
-          <button
-            onClick={() => onClick(inputValue, selectValue)}
-            className="btn loading btn-primary my-6 "
-          >
-            Rechercher <span className="text-xl ml-2">🔎</span>
-          </button>
-        ) : (
-          <button
-            onClick={() => onClick(inputValue, selectValue)}
-            className="btn btn-primary my-6 "
-          >
-            Rechercher <span className="text-xl ml-2">🔎</span>
-          </button>
-        )}
+        <button
+          onClick={() => onClick(inputValue, selectValue)}
+          className={"btn btn-primary my-6 " + (loading ? "loading" : "")}
+          disabled={inputValue.length === 0}
+        >
+          Rechercher <span className="text-xl ml-2">🔎</span>
+        </button>
       </form>
       {isAuthenticated && (
         <section className="flex flex-col gap-5">

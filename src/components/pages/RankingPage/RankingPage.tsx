@@ -34,48 +34,46 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
         <>
           <h1 className="text-4xl font-bold ">Classement</h1>
           {partialUsers.length > 0 ? (
-            <div className="">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Pseudo</th>
-                    <th>Meilleur score</th>
+            <table className="table ">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {partialUsers.map((partialUser: any, index: number) => (
+                  <tr
+                    className={
+                      user?.username === partialUser.username ? "active" : ""
+                    }
+                    key={index}
+                  >
+                    <td>{index + 1}</td>
+                    <td className="flex items-center gap-2 ">
+                      <div className="w-8 rounded-full">
+                        <img
+                          src={
+                            partialUser?.avatar
+                              ? partialUser.avatar
+                              : "avatar/avatar-0.png"
+                          }
+                          alt="profile-img"
+                        />
+                      </div>
+                      <p>
+                        {" "}
+                        {partialUser.username.length < 10
+                          ? partialUser.username
+                          : partialUser.username.slice(0, 10) + "..."}
+                      </p>
+                    </td>
+                    <td className="text-center">{partialUser.best_score}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {partialUsers.map((partialUser: any, index: number) => (
-                    <tr
-                      className={
-                        user?.username === partialUser.username ? "active" : ""
-                      }
-                      key={index}
-                    >
-                      <td>{index + 1}</td>
-                      <td className="flex items-center gap-2">
-                        <div className="w-8 rounded-full">
-                          <img
-                            src={
-                              partialUser?.avatar
-                                ? partialUser.avatar
-                                : "avatar/avatar-0.png"
-                            }
-                            alt="profile-img"
-                          />
-                        </div>
-                        <p>
-                          {" "}
-                          {partialUser.username.length < 10
-                            ? partialUser.username
-                            : partialUser.username.slice(0, 10) + "..."}
-                        </p>
-                      </td>
-                      <td className="text-center">{partialUser.best_score}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           ) : (
             <>
               <NotResults message="Aucun classement disponible" />

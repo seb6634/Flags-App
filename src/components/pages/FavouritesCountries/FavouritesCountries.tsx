@@ -27,6 +27,7 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       .get(`${countriesAPIUrl}/alpha?codes=${cca3ArrayToString}`)
       .then((response) => {
         setCountries(response.data);
+        setLoading(false);
       })
       .catch((er) => {
         console.log("error:", er);
@@ -36,10 +37,8 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
 
   useEffect(() => {
     if (user && user.favorites_countries) {
-      setLoading(false);
       getFavoritesCountries(user.favorites_countries);
     } else {
-      setLoading(false);
       setNotFound(true);
     }
   }, [user]);

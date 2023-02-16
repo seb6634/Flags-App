@@ -29,7 +29,6 @@ function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   const addToFarovites = (cca3: string) => {
     if (!user) {
@@ -56,10 +55,8 @@ function App() {
 
   const onClick = (inputValue: string, selectValue: string) => {
     if (inputValue.length === 0) {
-      setError(true);
       return;
     }
-    setError(false);
     setLoading(true);
     axios
       .get(
@@ -124,9 +121,7 @@ function App() {
         <Layout>
           <Routes>
             <Route
-              element={
-                <Welcome error={error} loading={loading} onClick={onClick} />
-              }
+              element={<Welcome loading={loading} onClick={onClick} />}
               path="/"
             />
             <Route element={<Login />} path="/login" />
