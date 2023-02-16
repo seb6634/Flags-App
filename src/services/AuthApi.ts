@@ -24,5 +24,5 @@ export const register = async (credentials: Partial<User>) => {
 export const logout = () => {
   removeItem("jwt");
   document.querySelector("html")?.setAttribute("data-theme", "dark");
-  toast(`Vous êtes maintenant déconnecté`);
+  toast.success(`Vous êtes maintenant déconnecté`);
 };

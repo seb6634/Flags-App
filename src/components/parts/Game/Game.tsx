@@ -50,7 +50,7 @@ const Game: FC<GameProps> = () => {
         }, DEBOUNCE_DELAY);
       });
     } else if (debounced && !penalized) {
-      toast.info(
+      toast.warning(
         `Hey! Tu es sur de bien jouer le jeu? 
          Pénalité de ${PENALTY_DURATION} secondes `
       );

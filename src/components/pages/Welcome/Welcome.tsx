@@ -25,7 +25,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
   const selectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     localStorage.setItem("selectValue", event.target.value);
     if (event.target.value === "lang")
-      toast("Recherche en anglais uniquement pour la langue.");
+      toast.info("Recherche en anglais uniquement pour la langue.");
     setSelectValue(event.target.value);
   };
 

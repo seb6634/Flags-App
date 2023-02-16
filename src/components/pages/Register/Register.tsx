@@ -27,7 +27,9 @@ const Register: FC = () => {
       .then((response) => {
         if (response.status === 201) {
           navigate("/login");
-          toast("Votre compte a bien été créé, vous pouvez vous connecter!");
+          toast.success(
+            "Votre compte a bien été créé, vous pouvez vous connecter!"
+          );
         }
       })
       .catch((error) => {

@@ -29,7 +29,7 @@ const Login: FC<LoginProps> = () => {
     login(user)
       .then((response) => {
         if (response.status === 200) {
-          toast(`Bienvenue ${response.data.username}!`);
+          toast.success(`Bienvenue ${response.data.username}!`);
           setIsAuthenticated(true);
         }
       })
