@@ -49,7 +49,7 @@ const Welcome: FC<WelcomeProps> = ({ onClick, loading }) => {
     <div className="h-full">
       <h1 className="text-3xl font-bold">Bienvenue dans Countries !</h1>
       <figure className="flex justify-center">
-        <img className="w-1/3 my-3" src="world-flags.png" alt="" />
+        <img className="w-1/3 my-3" src="world-flags.webp" alt="" />
       </figure>
       <form onSubmit={(e) => e.preventDefault()}>
         <p className="mb-2">

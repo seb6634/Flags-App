@@ -26,15 +26,15 @@ const ProfilePage: FC<ProfilePageProps> = ({
     });
   };
   const avatarList: { url: string; label: string }[] = [
-    { url: "avatar/avatar-0.png", label: "Avatar 0" },
-    { url: "avatar/avatar-1.png", label: "Avatar 1" },
-    { url: "avatar/avatar-2.png", label: "Avatar 2" },
-    { url: "avatar/avatar-3.png", label: "Avatar 3" },
-    { url: "avatar/avatar-4.png", label: "Avatar 4" },
-    { url: "avatar/avatar-5.png", label: "Avatar 5" },
-    { url: "avatar/avatar-6.png", label: "Avatar 6" },
-    { url: "avatar/avatar-7.png", label: "Avatar 7" },
-    { url: "avatar/avatar-8.png", label: "Avatar 8" },
+    { url: "avatar/avatar-0.webp", label: "Avatar 0" },
+    { url: "avatar/avatar-1.webp", label: "Avatar 1" },
+    { url: "avatar/avatar-2.webp", label: "Avatar 2" },
+    { url: "avatar/avatar-3.webp", label: "Avatar 3" },
+    { url: "avatar/avatar-4.webp", label: "Avatar 4" },
+    { url: "avatar/avatar-5.webp", label: "Avatar 5" },
+    { url: "avatar/avatar-6.webp", label: "Avatar 6" },
+    { url: "avatar/avatar-7.webp", label: "Avatar 7" },
+    { url: "avatar/avatar-8.webp", label: "Avatar 8" },
   ];
 
   const deleteAccountSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {

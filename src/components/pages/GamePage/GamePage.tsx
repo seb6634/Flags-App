@@ -33,7 +33,7 @@ const GamePage: FC<GamePageProps> = ({ user }) => (
     </div>
     <div className="flex flex-col gap-6">
       <div>
-        <p className="py-2">Lancer l'entrainement.</p>
+        <p className="py-2">Lancer l'entrainement</p>
         <NavLink to={"/training"}>
           <button className="btn btn-primary">
             Démarrer <span className="text-xl ml-2">🏋️</span>
@@ -41,7 +41,7 @@ const GamePage: FC<GamePageProps> = ({ user }) => (
         </NavLink>
       </div>
       <div>
-        <p className="py-2">Lancer la partie.</p>
+        <p className="py-2">Lancer la partie</p>
         <NavLink to={"/game"}>
           <button className="btn btn-primary">
             Démarrer <span className="text-xl ml-2">🌍</span>

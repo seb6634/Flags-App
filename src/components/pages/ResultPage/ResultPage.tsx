@@ -26,11 +26,19 @@ const ResultPage: FC<ResultPageProps> = ({
     }
   }, [countries.length]);
   return (
-    <div className="flex flex-col flex-wrap gap-6">
+    <div className="flex flex-col gap-6 mb-6">
       {loading ? (
         <Loader />
       ) : (
         <>
+          {!notFound && countries.length > 1 && (
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Pays trouvés</div>
+                <div className="stat-value">{countries.length}</div>
+              </div>
+            </div>
+          )}
           {!notFound ? (
             countries.map((country: Country) => (
               <Card

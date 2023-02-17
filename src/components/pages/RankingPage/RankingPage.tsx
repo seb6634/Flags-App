@@ -57,7 +57,7 @@ const RankingPage: FC<RankingPageProps> = ({ user }) => {
                           src={
                             partialUser?.avatar
                               ? partialUser.avatar
-                              : "avatar/avatar-0.png"
+                              : "avatar/avatar-0.webp"
                           }
                           alt="profile-img"
                         />

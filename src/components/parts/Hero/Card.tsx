@@ -13,7 +13,6 @@ interface CardProps {
 }
 
 const Card: FC<CardProps> = ({ country, addToFarovites, user }) => {
-  console.log("country:", country);
   const [isAuthenticated] = useState(hasAuthenticated());
   const [borders, setBorders] = useState<string[]>([]);
   const [currencies, setCurrencies] = useState<any[]>([]);

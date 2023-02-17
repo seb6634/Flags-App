@@ -74,7 +74,7 @@ const Nav: FC<NavProps> = ({ user }) => {
         </div>
         <div className="navbar-center">
           <NavLink to={"/"}>
-            <img width={35} src="world-flags.png" alt="world-logo" />
+            <img width={35} src="world-flags.webp" alt="world-logo" />
           </NavLink>
         </div>
 
@@ -85,7 +85,7 @@ const Nav: FC<NavProps> = ({ user }) => {
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full">
                     <img
-                      src={user?.avatar ? user.avatar : "avatar/avatar-0.png"}
+                      src={user?.avatar ? user.avatar : "avatar/avatar-0.webp"}
                       alt="profile-img"
                     />
                   </div>

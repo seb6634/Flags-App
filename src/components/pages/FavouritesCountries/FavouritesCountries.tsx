@@ -38,7 +38,11 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
   };
 
   useEffect(() => {
-    if (user && user.favorites_countries.length > 0) {
+    if (
+      user &&
+      user.favorites_countries &&
+      user.favorites_countries.length > 0
+    ) {
       const userFavorites = JSON.parse(user.favorites_countries);
       if (userFavorites.length > 0) {
         getFavoritesCountries(user.favorites_countries);
@@ -46,11 +50,14 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
         setLoading(false);
         setNotFound(true);
       }
+    } else {
+      setLoading(false);
+      setNotFound(true);
     }
   }, [user]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 mb-6">
       {loading ? (
         <Loader />
       ) : (
