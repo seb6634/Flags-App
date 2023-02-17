@@ -32,14 +32,20 @@ const FavouritesCountries: FC<FavouritesCountriesProps> = ({
       .catch((er) => {
         console.log("error:", er);
         setCountries([]);
+        setLoading(false);
+        setNotFound(true);
       });
   };
 
   useEffect(() => {
-    if (user && user.favorites_countries) {
-      getFavoritesCountries(user.favorites_countries);
-    } else {
-      setNotFound(true);
+    if (user && user.favorites_countries.length > 0) {
+      const userFavorites = JSON.parse(user.favorites_countries);
+      if (userFavorites.length > 0) {
+        getFavoritesCountries(user.favorites_countries);
+      } else {
+        setLoading(false);
+        setNotFound(true);
+      }
     }
   }, [user]);
 

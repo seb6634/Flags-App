@@ -18,7 +18,7 @@ interface GameProps {}
 const Game: FC<GameProps> = () => {
   const DEBOUNCE_DELAY = 500;
   const PENALTY_DURATION = 5000;
-  const TIME_TO_NEXT_QUESTION = 700;
+  const TIME_TO_NEXT_QUESTION = 300;
 
   const navigate = useNavigate();
   const [user, setUser] = useState<User>({} as User);
@@ -128,7 +128,6 @@ const Game: FC<GameProps> = () => {
                   {answers.map((answer: Answer) => {
                     return (
                       <button
-                        id={answer.cca3}
                         disabled={disabled}
                         onClick={(e) => handleClickAnswer(e, answer)}
                         key={answer.cca3}

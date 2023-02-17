@@ -17,6 +17,7 @@ export type Country = {
   ccn3: string;
   cca3: string;
   cioc: string;
+  borders: string[];
   independent: boolean;
   status: string;
   unMember: boolean;
