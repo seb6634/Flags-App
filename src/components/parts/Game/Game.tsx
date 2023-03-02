@@ -52,7 +52,7 @@ const Game: FC<GameProps> = () => {
     } else if (debounced && !penalized) {
       toast.warning(
         `Hey! Tu es sur de bien jouer le jeu? 
-         Pénalité de ${PENALTY_DURATION} secondes `
+         Pénalité de ${PENALTY_DURATION / 1000} secondes `
       );
       setDisabled(true);
       setPenalized(true);
