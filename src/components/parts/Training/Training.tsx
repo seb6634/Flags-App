@@ -6,6 +6,7 @@ import { countriesAPIUrl } from "../../../services/ApiRequests";
 import { Country } from "../../types";
 import Loader from "../Loader/Loader";
 import "./Training.css";
+import MuteBtn from "../../Mute/MuteBtn";
 
 interface TrainingProps {}
 
@@ -121,7 +122,9 @@ const Training: FC<TrainingProps> = () => {
         <>
           {country && countries.length > 0 && (
             <>
-              <div className="flex justify-center"></div>
+              <div className="flex justify-center">
+                <MuteBtn />
+              </div>
               <div className="flex flex-col items-center">
                 <h1 className="text-2xl font-bold">
                   À quel pays appartient ce drapeau ?

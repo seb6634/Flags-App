@@ -48,7 +48,7 @@ const Login: FC<LoginProps> = () => {
 
   return (
     <>
-      <div className="hero-content flex-col lg:flex-row-reverse">
+      <div className="hero-content flex-col">
         <div className="text-center lg:text-left">
           <h1 className="text-4xl font-bold">Me connecter!</h1>
           <p className="py-6">
